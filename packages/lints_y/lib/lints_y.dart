@@ -1,1 +1,0 @@
-library lints_y;

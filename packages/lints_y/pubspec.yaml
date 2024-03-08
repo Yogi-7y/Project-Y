@@ -1,7 +1,6 @@
 name: lints_y
 description: "Lint rules for Project Y."
 version: 0.0.1
-homepage:
 
 environment:
   sdk: ">=3.2.6 <4.0.0"
@@ -10,10 +9,5 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^2.0.0
 
 flutter:

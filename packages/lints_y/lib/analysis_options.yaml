@@ -1,0 +1,18 @@
+include: all_lint_rules.yaml
+
+analyzer:
+  language:
+    strict-raw-types: true
+    strict-casts: true
+    strict-inference: true
+  errors:
+    included_file_warning: ignore
+
+linter:
+  rules:
+    prefer_double_quotes: false
+    prefer_final_parameters: false
+    unnecessary_final: false
+    always_specify_types: false
+    lines_longer_than_80_chars: false
+    no_leading_underscores_for_local_identifiers: false
