@@ -1,0 +1,20 @@
+name: network
+description: "Network package for Project Y."
+version: 0.0.1
+
+environment:
+  sdk: ">=3.2.6 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  meta: ^1.10.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lints_y:
+    path: ../lints_y
+
+flutter:
