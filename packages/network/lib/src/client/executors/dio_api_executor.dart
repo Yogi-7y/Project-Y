@@ -18,7 +18,9 @@ class DioApiExecutor implements ApiExecutor {
     try {
       final _response = await dio.get<T>(request.url);
       return Success(_response.data as T);
-    } catch (e, s) {}
+    } catch (exception, stackTrace) {
+      return _catch(request, exception, stackTrace);
+    }
   }
 
   @override
@@ -26,16 +28,26 @@ class DioApiExecutor implements ApiExecutor {
     throw UnimplementedError();
   }
 
-  void _catch(Object? exception, StackTrace? stackTrace) {
+  Failure<T> _catch<T>(
+    Request request,
+    Object? exception,
+    StackTrace? stackTrace,
+  ) {
     if (exception is DioException) {
-      throw ApiException(
-        request: request,
-        error: e,
-        response: e.response,
-        stackTrace: s,
+      return Failure<T>(
+        error: ApiException(
+          request: request,
+          error: exception,
+          response: exception.response,
+          stackTrace: stackTrace,
+        ),
+        stackTrace: stackTrace,
       );
     }
 
-    throw ApiException(request: request, error: e, stackTrace: s);
+    return Failure(
+      error: exception,
+      stackTrace: stackTrace,
+    );
   }
 }

@@ -40,4 +40,25 @@ void main() {
     verify(() => client.apiExecutor.post<MapPayload>(request));
     verifyNever(() => client.apiExecutor.get<MapPayload>(request));
   });
+
+  test(
+    'unsupported request throws UnimplementedError',
+    () {
+      const request = _UnsupportedRequest();
+
+      expect(
+        () async => client.call<MapPayload>(request),
+        throwsA(isA<UnsupportedError>()),
+      );
+    },
+  );
+}
+
+class _UnsupportedRequest extends Request {
+  const _UnsupportedRequest({
+    // ignore: unused_element
+    super.host = 'api.example.com',
+    // ignore: unused_element
+    super.endpoint = '/users',
+  });
 }

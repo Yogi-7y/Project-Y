@@ -43,7 +43,7 @@ class Success<S> extends Result<S> {
 class Failure<S> extends Result<S> {
   /// {@macro result_failure}
   Failure({
-    required this.message,
+    this.message = 'Something went wrong! Please try again later.',
     this.error,
     this.stackTrace,
   });

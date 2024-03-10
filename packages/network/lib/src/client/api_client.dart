@@ -18,7 +18,7 @@ class ApiClient {
     } else if (request is PostRequest) {
       return apiExecutor.post(request);
     } else {
-      throw UnimplementedError('Request type(${request.runtimeType}) not implemented');
+      throw UnsupportedError('Request type(${request.runtimeType}) not supported!');
     }
   }
 }
