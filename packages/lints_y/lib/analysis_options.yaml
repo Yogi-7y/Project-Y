@@ -17,3 +17,6 @@ linter:
     lines_longer_than_80_chars: false
     no_leading_underscores_for_local_identifiers: false
     public_member_api_docs: false
+    always_use_package_imports: false
+    one_member_abstracts: false
+    avoid_catches_without_on_clauses: false

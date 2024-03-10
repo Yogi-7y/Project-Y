@@ -63,7 +63,7 @@ class PostRequest extends Request {
   const PostRequest({
     required super.host,
     required super.endpoint,
-    required this.body,
+    this.body = const <String, Object?>{},
     super.scheme,
     super.headers,
     super.queryParameters,

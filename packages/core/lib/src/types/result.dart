@@ -12,7 +12,7 @@ abstract class Result<S> {
   S? get valueOrNull => isSuccess ? (this as Success<S>).value : null;
 
   void when({
-    required void Function(S value) success,
+    required void Function(S? value) success,
     required void Function(String message, Object? error, StackTrace? stackTrace) failure,
   }) {
     if (this is Success<S>) {
@@ -33,7 +33,7 @@ class Success<S> extends Result<S> {
   Success(this.value);
 
   /// The value of the [Result].
-  final S value;
+  final S? value;
 }
 
 /// {@template result_failure}

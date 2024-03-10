@@ -1,12 +1,16 @@
 name: network
 description: "Network package for Project Y."
 version: 0.0.1
+publish_to: "none"
 
 environment:
   sdk: ">=3.2.6 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
+  core:
+    path: ../core
+  dio: ^5.4.1
   flutter:
     sdk: flutter
   meta: ^1.10.0
@@ -16,5 +20,6 @@ dev_dependencies:
     sdk: flutter
   lints_y:
     path: ../lints_y
+  mocktail: ^1.0.3
 
 flutter:
