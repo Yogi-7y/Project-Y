@@ -1,7 +1,7 @@
 name: resurface
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+publish_to: "none"
 
 environment:
   sdk: ">=3.2.6 <4.0.0"
@@ -10,7 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  core:
+    path: ../core
   meta: ^1.10.0
+  network:
+    path: ../network
+  flutter_riverpod: ^2.4.10
 
 dev_dependencies:
   flutter_test:
