@@ -1,0 +1,21 @@
+name: smart_textfield
+description: "Smart TextField"
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ">=3.2.6 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  collection: ^1.18.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lints_y:
+    path: ../lints_y
+
+flutter:
