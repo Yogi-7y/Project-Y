@@ -11,16 +11,32 @@ abstract class Result<S> {
 
   S? get valueOrNull => isSuccess ? (this as Success<S>).value : null;
 
-  void when({
-    required void Function(S? value) success,
-    required void Function(String message, Object? error, StackTrace? stackTrace) failure,
+  T when<T>({
+    required T Function(S? value) success,
+    required T Function(String message, Object? error, StackTrace? stackTrace) failure,
   }) {
     if (this is Success<S>) {
-      success((this as Success<S>).value);
+      return success((this as Success<S>).value);
     } else {
       final _failure = this as Failure<S>;
-      failure(_failure.message, _failure.error, _failure.stackTrace);
+      return failure(_failure.message, _failure.error, _failure.stackTrace);
     }
+  }
+
+  Result<T> map<T>(T Function(S value) f) {
+    if (this is Success<S>) {
+      return Success(f((this as Success<S>).value as S));
+    }
+
+    if (this is Failure<S>) {
+      return Failure(
+        message: (this as Failure<S>).message,
+        error: (this as Failure<S>).error,
+        stackTrace: (this as Failure<S>).stackTrace,
+      );
+    }
+
+    throw Exception('Unknown result type $runtimeType');
   }
 }
 

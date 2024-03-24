@@ -1,6 +1,6 @@
 import 'package:core/core.dart';
 
-import '../request/request.dart';
+import '../../request/request.dart';
 
 abstract class ApiExecutor {
   Future<void> setUp();

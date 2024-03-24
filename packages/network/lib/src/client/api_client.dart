@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 
 import '../request/request.dart';
-import 'api_executor.dart';
+import 'executors/api_executor.dart';
 
 typedef MapPayload = Map<String, Object?>;
 
@@ -11,6 +11,8 @@ class ApiClient {
   });
 
   final ApiExecutor apiExecutor;
+
+  Future<void> setup() async => apiExecutor.setUp();
 
   AsyncResult<T> call<T>(Request request) {
     if (request is GetRequest) {

@@ -20,3 +20,6 @@ linter:
     always_use_package_imports: false
     one_member_abstracts: false
     avoid_catches_without_on_clauses: false
+    prefer_expression_function_bodies: false
+    always_put_control_body_on_new_line: false
+    require_trailing_commas: false

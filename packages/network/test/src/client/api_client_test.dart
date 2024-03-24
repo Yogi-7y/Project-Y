@@ -2,7 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network/src/client/api_client.dart';
-import 'package:network/src/client/api_executor.dart';
+import 'package:network/src/client/executors/api_executor.dart';
 import 'package:network/src/request/request.dart';
 
 class MockApiExecutor extends Mock implements ApiExecutor {}

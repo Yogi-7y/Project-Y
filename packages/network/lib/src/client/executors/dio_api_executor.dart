@@ -1,9 +1,10 @@
+import 'dart:developer' as developer;
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 
 import '../../exceptions/api_exception.dart';
 import '../../request/request.dart';
-import '../api_executor.dart';
+import 'api_executor.dart';
 
 class DioApiExecutor implements ApiExecutor {
   late Dio dio;
@@ -24,8 +25,13 @@ class DioApiExecutor implements ApiExecutor {
   }
 
   @override
-  AsyncResult<T> post<T>(Request request) {
-    throw UnimplementedError();
+  AsyncResult<T> post<T>(Request request) async {
+    try {
+      final _response = await dio.get<T>(request.url);
+      return Success(_response.data as T);
+    } catch (exception, stackTrace) {
+      return _catch(request, exception, stackTrace);
+    }
   }
 
   Failure<T> _catch<T>(
@@ -33,6 +39,7 @@ class DioApiExecutor implements ApiExecutor {
     Object? exception,
     StackTrace? stackTrace,
   ) {
+    developer.log('Error: $exception', error: exception, stackTrace: stackTrace);
     if (exception is DioException) {
       return Failure<T>(
         error: ApiException(
