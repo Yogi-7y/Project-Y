@@ -23,3 +23,5 @@ linter:
     prefer_expression_function_bodies: false
     always_put_control_body_on_new_line: false
     require_trailing_commas: false
+    diagnostic_describe_all_properties: false
+    unreachable_from_main: false

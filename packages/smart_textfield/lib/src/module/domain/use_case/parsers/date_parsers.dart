@@ -6,6 +6,11 @@ typedef DateType = ({
   int year,
 });
 
+typedef StartAndEndOfPattern = ({
+  int start,
+  int end,
+});
+
 final dateParsers = <DateParser>[
   TodayDateParser(),
   TomorrowDateParser(),
@@ -17,8 +22,22 @@ final dateParsers = <DateParser>[
 
 @immutable
 abstract class DateParser {
+  String get regEx;
+
   @protected
   DateType? extractDate(String value);
+
+  RegExpMatch? findMatch(String value) {
+    final _match = RegExp(regEx).firstMatch(value);
+
+    return _match;
+  }
+
+  StartAndEndOfPattern? getStartAndEndIndex(String value) {
+    final _match = findMatch(value);
+
+    return _match != null ? (start: _match.start, end: _match.end) : null;
+  }
 
   DateTime? parse(String value) {
     final _date = extractDate(value);
@@ -31,9 +50,13 @@ abstract class DateParser {
 
 /// Handles the parsing of dates which include the word 'today'
 class TodayDateParser extends DateParser {
+  static const _regEx = r'\b(today)\b';
+
   @override
   DateType? extractDate(String value) {
-    if (value.contains('today')) {
+    final _match = RegExp(_regEx).firstMatch(value);
+
+    if (_match != null) {
       final _now = DateTime.now();
 
       return (day: _now.day, month: _now.month, year: _now.year);
@@ -41,6 +64,9 @@ class TodayDateParser extends DateParser {
 
     return null;
   }
+
+  @override
+  String get regEx => _regEx;
 }
 
 /// Handles the parsing of dates which include the word 'tomorrow'
@@ -56,6 +82,9 @@ class TomorrowDateParser extends DateParser {
 
     return null;
   }
+
+  @override
+  String get regEx => r'\b(tomorrow)\b';
 }
 
 /// Handles the parsing of dates which include the word 'overmorrow'
@@ -71,6 +100,9 @@ class OvermorrowDateParser extends DateParser {
 
     return null;
   }
+
+  @override
+  String get regEx => r'\b(overmorrow)\b';
 }
 
 /// Handles the parsing of dates in the format dd/MM/yyyy
@@ -95,6 +127,9 @@ class LittleEndianDateParser extends DateParser {
 
     return null;
   }
+
+  @override
+  String get regEx => _regEx;
 }
 
 /// Handles the parsing of dates in 20th August 2024 format
@@ -118,6 +153,9 @@ class DateWithSuffixAndFullMonthParser extends DateParser {
 
     return null;
   }
+
+  @override
+  String get regEx => _dateWithSuffixAndFullMonthRegEx;
 }
 
 class DateWithSuffixAndShortMonthNameParser extends DateParser {
@@ -140,6 +178,9 @@ class DateWithSuffixAndShortMonthNameParser extends DateParser {
 
     return null;
   }
+
+  @override
+  String get regEx => _dateWithSuffixAndShortMonthRegEx;
 }
 
 @visibleForTesting
