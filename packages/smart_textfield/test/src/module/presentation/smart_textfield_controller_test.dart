@@ -1,6 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
-import 'dart:math';
+// ignore_for_file: cascade_invocations
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -103,7 +101,9 @@ void main() {
         final _expectedResult = <String, SelectionItemMetaData>{
           'p:': const SelectionItemMetaData(
             item: Project(name: 'Project1'),
-            offset: (start: 0, end: 10),
+            offset: (start: 0, end: 8),
+
+            /// p:Project1 -> Project1
           ),
         };
 
@@ -116,26 +116,52 @@ void main() {
       });
 
       test(
-        'is updated correctly when multiple values are selected',
+        'updates text with the selected value',
         () {
+          const _expectedText = 'lorem ipsum Project1';
+
           final _expectedResult = <String, SelectionItemMetaData>{
             'p:': const SelectionItemMetaData(
               item: Project(name: 'Project1'),
-              offset: (start: 0, end: 10),
+              offset: (start: 12, end: 20),
+            ),
+          };
+
+          controller
+            ..text = 'lorem ipsum '
+            ..text = 'lorem ipsum p:Project1'
+            ..selectValue('p:', const Project(name: 'Project1'));
+
+          expect(controller.selectedValues, isNotEmpty);
+          expect(controller.selectedValues['p:'], isNotNull);
+          expect(controller.text, equals(_expectedText));
+          expect(controller.selectedValues, equals(_expectedResult));
+        },
+      );
+
+      test(
+        'is updated correctly when multiple values are selected',
+        () {
+          const _expectedText = 'Project1 Label1';
+          final _expectedResult = <String, SelectionItemMetaData>{
+            'p:': const SelectionItemMetaData(
+              item: Project(name: 'Project1'),
+              offset: (start: 0, end: 8),
             ),
             'l:': const SelectionItemMetaData(
               item: Label(name: 'Label1'),
-              offset: (start: 11, end: 19),
+              offset: (start: 9, end: 15),
             ),
           };
 
           controller
             ..text = 'p:Project1'
-            ..selectValue('p:', const Project(name: 'Project1'))
-            ..text = 'p:Project1 l:Label1'
+            ..selectValue('p:', const Project(name: 'Project1')) // Project1
+            ..text = 'Project1 l:Label1'
             ..selectValue('l:', const Label(name: 'Label1'));
 
           expect(controller.selectedValues, isNotEmpty);
+          expect(controller.text, equals(_expectedText));
           expect(controller.selectedValues, equals(_expectedResult));
         },
       );
@@ -378,6 +404,219 @@ void main() {
 
           controller.text = 'foo bar p:';
           expect(controller.activeSelectionMenu, isNull);
+        },
+      );
+    },
+  );
+
+  group(
+    'isCursorAtEnd',
+    () {
+      test('returns true when the cursor is at the end of the text', () {
+        controller.text = 'Hello, World!';
+        controller.selection =
+            TextSelection.fromPosition(TextPosition(offset: controller.text.length));
+
+        expect(controller.isCursorAtEnd, isTrue);
+      });
+
+      test('returns false when the cursor is not at the end of the text', () {
+        controller.text = 'Hello, World!';
+        controller.selection =
+            TextSelection.fromPosition(const TextPosition(offset: 5)); // Cursor is at position 5
+
+        expect(controller.isCursorAtEnd, isFalse);
+      });
+
+      test('returns true for an empty text', () {
+        controller.text = '';
+        controller.selection =
+            TextSelection.fromPosition(const TextPosition(offset: 0)); // Cursor is at position 0
+
+        expect(controller.isCursorAtEnd, isTrue);
+      });
+    },
+  );
+
+  group(
+    'updateSelectedValues',
+    () {
+      test(
+        'returns true if cursor is before any of the selected menu items',
+        () {
+          controller.text = 'foo bar p:Project1';
+          controller.selectValue('p:', const Project(name: 'Project1'));
+
+          controller.selection = const TextSelection.collapsed(offset: 0);
+
+          expect(controller.updateSelectedValues, isTrue);
+          expect(controller.selectedValues, isNotEmpty);
+        },
+      );
+
+      test(
+        'return false if the cursor is at the end of the text',
+        () {
+          controller.text = 'foo bar p:Project1';
+          controller.selectValue('p:', const Project(name: 'Project1'));
+
+          controller.text = 'foo bar Project1 lorem';
+          controller.selection =
+              TextSelection.fromPosition(TextPosition(offset: controller.text.length));
+
+          expect(controller.updateSelectedValues, isFalse);
+          expect(controller.selectedValues, isNotEmpty);
+        },
+      );
+
+      test(
+        'return false if the cursor is after any of the selected menu items',
+        () {
+          controller.text = 'foo bar p:Project1';
+          controller.selectValue('p:', const Project(name: 'Project1'));
+
+          controller.text = 'foo bar Project1 lorem';
+          controller.selection = const TextSelection.collapsed(offset: 18);
+
+          expect(controller.updateSelectedValues, isFalse);
+          expect(controller.selectedValues, isNotEmpty);
+        },
+      );
+
+      test(
+        'return false when cursor is at the beginning but there are no selected menu items',
+        () {
+          controller.text = 'foo bar Project1 lorem';
+          controller.selection = const TextSelection.collapsed(offset: 0);
+
+          expect(controller.updateSelectedValues, isFalse);
+          expect(controller.selectedValues, isEmpty);
+        },
+      );
+    },
+  );
+
+  group(
+    'convertToTextSpanInfo',
+    () {
+      test(
+        'returns the entire text in a single object when there are not items to be highlighted',
+        () {
+          final _expectedResult = [
+            const TextSpanInfo(
+              text: 'foo bar Project1',
+              isHighlighted: false,
+              offset: (start: 0, end: 17),
+            ),
+          ];
+
+          controller.text = 'foo bar Project1';
+          expect(controller.convertToTextSpanInfo(), equals(_expectedResult));
+        },
+      );
+
+      test(
+        'returns an array with selected project being highlighted',
+        () {
+          const _expectedResult = [
+            TextSpanInfo(
+              text: 'foo bar ',
+              isHighlighted: false,
+              offset: (start: 0, end: 8),
+            ),
+            TextSpanInfo(
+              text: 'Project1',
+              isHighlighted: true,
+              offset: (start: 8, end: 16),
+            ),
+          ];
+
+          controller.text = 'foo bar p:Project1';
+          controller.selectValue('p:', const Project(name: 'Project1'));
+
+          expect(controller.selectedValues, isNotEmpty);
+          expect(controller.selectedValues['p:']!.item, isA<Project>());
+          expect(controller.text, equals('foo bar Project1'));
+          expect(controller.convertToTextSpanInfo(), equals(_expectedResult));
+        },
+      );
+
+      test(
+        'with suffix text',
+        () {
+          controller
+            ..text = 'foo bar p:Project1'
+            ..selectValue('p:', const Project(name: 'Project1'))
+            ..text = 'foo bar Project1 lorem';
+
+          const _expectedText = 'foo bar Project1 lorem';
+          const _expectedResult = [
+            TextSpanInfo(
+              text: 'foo bar ',
+              isHighlighted: false,
+              offset: (start: 0, end: 8),
+            ),
+            TextSpanInfo(
+              text: 'Project1',
+              isHighlighted: true,
+              offset: (start: 8, end: 16),
+            ),
+            TextSpanInfo(
+              text: ' lorem',
+              isHighlighted: false,
+              offset: (start: 16, end: 22),
+            ),
+          ];
+
+          expect(controller.selectedValues, isNotEmpty);
+          expect(controller.text, equals(_expectedText));
+          expect(controller.convertToTextSpanInfo(), equals(_expectedResult));
+        },
+      );
+
+      test(
+        'handles multiple values in selectedValues correctly',
+        () {
+          controller
+            ..text = 'foo bar p:Project1'
+            ..selectValue('p:', const Project(name: 'Project1'))
+            ..text = 'foo bar Project1 lorem l:Label1'
+            ..selectValue('l:', const Label(name: 'Label1'))
+            ..text = 'foo bar Project1 lorem Label1 qux';
+
+          const _expectedText = 'foo bar Project1 lorem Label1 qux';
+
+          const _expectedResult = [
+            TextSpanInfo(
+              text: 'foo bar ',
+              isHighlighted: false,
+              offset: (start: 0, end: 8),
+            ),
+            TextSpanInfo(
+              text: 'Project1',
+              isHighlighted: true,
+              offset: (start: 8, end: 16),
+            ),
+            TextSpanInfo(
+              text: ' lorem ',
+              isHighlighted: false,
+              offset: (start: 16, end: 23),
+            ),
+            TextSpanInfo(
+              text: 'Label1',
+              isHighlighted: true,
+              offset: (start: 23, end: 29),
+            ),
+            TextSpanInfo(
+              text: ' qux',
+              isHighlighted: false,
+              offset: (start: 29, end: 33),
+            ),
+          ];
+
+          expect(controller.selectedValues, isNotEmpty);
+          expect(controller.text, equals(_expectedText));
+          expect(controller.convertToTextSpanInfo(), equals(_expectedResult));
         },
       );
     },

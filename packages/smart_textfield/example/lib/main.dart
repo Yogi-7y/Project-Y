@@ -104,6 +104,7 @@ class Projects extends SelectionMenu<Project> {
 }
 
 @immutable
+// ignore: avoid_implementing_value_types
 class Project implements SelectionMenuItem {
   const Project({
     required this.projectName,

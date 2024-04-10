@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 import '../../../smart_textfield.dart';
+import '../domain/use_case/smart_textfield_use_case.dart';
 
 typedef Offset = ({int start, int end});
 
@@ -15,7 +17,7 @@ class SmartTextFieldController extends TextEditingController {
     addListener(_handleTextChange);
   }
 
-  // late final _useCase = SmartTextFieldUseCase();
+  late final _useCase = SmartTextFieldUseCase();
   final List<SelectionMenu> _selectionMenus;
 
   /// Map of values selected by the user.
@@ -24,7 +26,6 @@ class SmartTextFieldController extends TextEditingController {
 
   /// The currently active selection menu based on the
   /// pattern matched in the text field.
-  @visibleForTesting
   SelectionMenu? activeSelectionMenu;
 
   /// The offset of the currently active pattern from the selection menu in the text field.\
@@ -38,14 +39,18 @@ class SmartTextFieldController extends TextEditingController {
   ) {
     final _term = '$pattern$query';
     final _offset = _getOffset(_term);
+    text = replace(_offset, item.queryContent);
+
+    final _updatedOffset = _getOffset(item.queryContent);
 
     final _metaData = SelectionItemMetaData(
       item: item,
-      offset: _offset,
+      offset: _updatedOffset,
     );
+
     selectedValues[pattern] = _metaData;
+
     clearSelectionMenu();
-    text = replace(_offset, item.queryContent);
   }
 
   /// Removes the currently active selection menu overlay.
@@ -55,7 +60,7 @@ class SmartTextFieldController extends TextEditingController {
 
   /// The list of [SelectionMenuItem]s that are currently shown to the user
   /// in the overlay.
-  @visibleForTesting
+  @internal
   final activeOptions = <SelectionMenuItem>[];
 
   void _updateActiveOptions() {
@@ -134,11 +139,121 @@ class SmartTextFieldController extends TextEditingController {
         .toList();
   }
 
+  bool get isCursorAtEnd => selection.start == text.length && selection.end == text.length;
+
+  /// Boolean to determine if it needs to update the offset of the selected values based on the cursor position.
+  /// Returns `true` if the cursor is not at the end and it's before any of the items, `false` otherwise.
+  bool get updateSelectedValues {
+    if (isCursorAtEnd) return false;
+    return selectedValues.values.any((item) => selection.start < item.offset.start);
+  }
+
   void clearSelectionMenu() {
     query = '';
     activeOptions.clear();
     activeSelectionMenu = null;
     activePatternOffset = _noOffset;
+  }
+
+  @visibleForTesting
+  List<TextSpanInfo> convertToTextSpanInfo() {
+    if (selectedValues.isEmpty)
+      return [
+        TextSpanInfo(
+          text: text,
+          isHighlighted: false,
+          offset: (start: 0, end: text.length + 1),
+        )
+      ];
+
+    final _textSpanInfo = <TextSpanInfo>[];
+
+    var currentOffset = 0;
+
+    selectedValues.forEach((pattern, value) {
+      // Add the text before the selected value
+      if (value.offset.start > currentOffset) {
+        _textSpanInfo.add(
+          TextSpanInfo(
+            text: text.substring(currentOffset, value.offset.start),
+            isHighlighted: false,
+            offset: (start: currentOffset, end: value.offset.start),
+          ),
+        );
+      }
+
+      // Add the selected value
+      _textSpanInfo.add(
+        TextSpanInfo(
+          text: value.item.queryContent,
+          isHighlighted: true,
+          offset: value.offset,
+        ),
+      );
+
+      currentOffset = value.offset.end;
+    });
+
+    // Add the remaining text after the last selected value
+    if (currentOffset < text.length) {
+      _textSpanInfo.add(
+        TextSpanInfo(
+          text: text.substring(currentOffset),
+          isHighlighted: false,
+          offset: (start: currentOffset, end: text.length),
+        ),
+      );
+    }
+
+    return _textSpanInfo;
+  }
+
+  @override
+  TextSpan buildTextSpan({
+    required BuildContext context,
+    required bool withComposing,
+    TextStyle? style,
+  }) {
+    final _value = _useCase.processDateTime(text);
+
+    if (_value == null)
+      return TextSpan(
+        style: style,
+        children: [
+          TextSpan(
+            text: text,
+          ),
+        ],
+      );
+
+    final _before = TextSpan(
+      text: text.substring(0, _value.start),
+      style: style,
+    );
+
+    final _highlight = TextSpan(
+      text: text.substring(_value.start, _value.end),
+      style: style?.copyWith(
+        decoration: TextDecoration.underline,
+        decorationStyle: TextDecorationStyle.dashed,
+        decorationThickness: 1,
+        decorationColor: Colors.grey,
+      ),
+    );
+
+    final _after = TextSpan(
+      text: text.substring(_value.end),
+      style: style,
+    );
+
+    return TextSpan(
+      children: [
+        _before,
+        _highlight,
+        _after,
+      ],
+      style: style,
+    );
   }
 }
 
@@ -164,4 +279,30 @@ class SelectionItemMetaData {
 
   @override
   int get hashCode => item.hashCode ^ offset.hashCode;
+}
+
+@immutable
+class TextSpanInfo {
+  const TextSpanInfo({
+    required this.text,
+    required this.isHighlighted,
+    required this.offset,
+  });
+
+  final String text;
+  final bool isHighlighted;
+  final Offset offset;
+
+  @override
+  String toString() => 'TextSpanInfo(text: $text, isHighlighted: $isHighlighted, offset: $offset)';
+
+  @override
+  bool operator ==(covariant TextSpanInfo other) {
+    if (identical(this, other)) return true;
+
+    return other.text == text && other.isHighlighted == isHighlighted && other.offset == offset;
+  }
+
+  @override
+  int get hashCode => text.hashCode ^ isHighlighted.hashCode ^ offset.hashCode;
 }

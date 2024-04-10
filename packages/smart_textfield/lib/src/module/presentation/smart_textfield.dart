@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 
 import '../../../smart_textfield.dart';
-import '../domain/use_case/smart_textfield_use_case.dart';
 import 'smart_textfield_controller.dart';
 
 class SmartTextField extends StatefulWidget {
@@ -13,27 +11,17 @@ class SmartTextField extends StatefulWidget {
   });
 
   final List<SelectionMenu> selectionMenus;
+
   @override
   State<SmartTextField> createState() => _SmartTextFieldState();
 }
 
 class _SmartTextFieldState extends State<SmartTextField> {
-  late final _controller = SmartTextFieldController();
+  late final _controller = SmartTextFieldController(
+    selectionMenus: widget.selectionMenus,
+  );
+
   late final _globalKey = GlobalKey<FormState>();
-
-  bool _showOverlay = false;
-
-  final _itemList = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-    'Item 6',
-    'Item 7',
-  ];
-
-  var _resultList = <String>[];
 
   String query = '';
   int currentModifier = -1;
@@ -43,17 +31,7 @@ class _SmartTextFieldState extends State<SmartTextField> {
     super.initState();
 
     _controller.addListener(() {
-      final _currentWord = _controller.text.split(' ').last;
-
-      if (_currentWord.startsWith('p:')) {
-        _showOverlay = true;
-        query = _currentWord.substring(2);
-        _resultList = _itemList.where((element) => element.contains(query)).toList();
-        setState(() {});
-      } else {
-        _showOverlay = false;
-        setState(() {});
-      }
+      setState(() {});
     });
   }
 
@@ -62,7 +40,7 @@ class _SmartTextFieldState extends State<SmartTextField> {
     final _width = MediaQuery.of(context).size.width;
 
     return PortalTarget(
-      visible: _showOverlay,
+      visible: _controller.activeSelectionMenu != null,
       anchor: const Aligned(
         follower: Alignment.bottomRight,
         target: Alignment.topRight,
@@ -75,23 +53,18 @@ class _SmartTextFieldState extends State<SmartTextField> {
         ),
         child: SizedBox(
           width: _width * .8,
-          height: 200,
+          // height: 200,
           child: SingleChildScrollView(
             child: Column(
               children: List.generate(
-                  _resultList.length,
+                  _controller.activeOptions.length,
                   (index) => ListTile(
-                        title: Text(_itemList[index]),
+                        title: Text(_controller.activeOptions[index].queryContent),
                         onTap: () {
-                          final _currentWord = _controller.text.split(' ').last;
-                          final _newText =
-                              _controller.text.replaceFirst(_currentWord, _resultList[index]);
-                          _controller
-                            ..text = _newText
-                            ..selection =
-                                TextSelection.fromPosition(TextPosition(offset: _newText.length));
-                          _showOverlay = false;
-                          setState(() {});
+                          _controller.selectValue(
+                            _controller.activeSelectionMenu!.pattern,
+                            _controller.activeOptions[index],
+                          );
                         },
                       )),
             ),

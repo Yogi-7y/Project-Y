@@ -27,6 +27,7 @@ abstract class SelectionMenu<T extends SelectionMenuItem> {
   final List<T> items;
 }
 
+@immutable
 abstract class SelectionMenuItem {
   const SelectionMenuItem({
     required this.queryContent,
