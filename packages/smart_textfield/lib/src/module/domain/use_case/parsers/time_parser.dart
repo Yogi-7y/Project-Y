@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'date_parsers.dart';
+
 typedef Time = ({int hour, int minute});
 
 final timeParsers = <TimeParser>[
@@ -10,6 +12,8 @@ final timeParsers = <TimeParser>[
 ];
 
 abstract class TimeParser {
+  RegExp get regExp;
+
   Time? extractTime(String value);
 
   TimeOfDay? parse(String value) {
@@ -19,14 +23,24 @@ abstract class TimeParser {
 
     return null;
   }
+
+  RegExpMatch? findMatch(String value) {
+    final _match = regExp.firstMatch(value);
+
+    return _match;
+  }
+
+  StartAndEndOfPattern? getStartAndEndIndex(String value) {
+    final _match = findMatch(value);
+
+    return _match != null ? (start: _match.start, end: _match.end) : null;
+  }
 }
 
 class TwelveHourParser extends TimeParser {
-  static final regex = RegExp(r'\b((?:[01]?\d|2[0-3]):[0-5]\d\s*(?:am|pm)?|1?[0-9]\s*(?:am|pm))\b');
-
   @override
   Time? extractTime(String value) {
-    final match = regex.firstMatch(value);
+    final match = regExp.firstMatch(value);
 
     if (match != null) {
       final time = match.group(0);
@@ -50,14 +64,18 @@ class TwelveHourParser extends TimeParser {
 
     return null;
   }
+
+  @override
+  RegExp get regExp => RegExp(r'\b((?:[01]?\d|2[0-3]):[0-5]\d\s*(?:am|pm)?|1?[0-9]\s*(?:am|pm))\b');
+
+  // @override
+  // String get regExPattern => r'\b((?:[01]?\d|2[0-3]):[0-5]\d\s*(?:am|pm)?|1?[0-9]\s*(?:am|pm))\b';
 }
 
 class TwentyFourHourParser extends TimeParser {
-  static final regex = RegExp(r'\b((?:[01]?\d|2[0-3]):[0-5]\d)\b');
-
   @override
   Time? extractTime(String value) {
-    final match = regex.firstMatch(value);
+    final match = regExp.firstMatch(value);
 
     if (match != null) {
       final time = match.group(0);
@@ -74,26 +92,31 @@ class TwentyFourHourParser extends TimeParser {
 
     return null;
   }
+
+  @override
+  RegExp get regExp => RegExp(r'\b((?:[01]?\d|2[0-3]):[0-5]\d)\b');
 }
 
 class NoonParser extends TimeParser {
-  static final regex = RegExp(r'\bnoon\b');
+  @override
+  RegExp get regExp => RegExp(r'\bnoon\b');
 
   @override
   Time? extractTime(String value) {
-    if (regex.hasMatch(value)) return (hour: 12, minute: 0);
+    if (regExp.hasMatch(value)) return (hour: 12, minute: 0);
 
     return null;
   }
 }
 
 class MidnightParser extends TimeParser {
-  static final regex = RegExp(r'\bmidnight\b');
-
   @override
   Time? extractTime(String value) {
-    if (regex.hasMatch(value)) return (hour: 0, minute: 0);
+    if (regExp.hasMatch(value)) return (hour: 0, minute: 0);
 
     return null;
   }
+
+  @override
+  RegExp get regExp => RegExp(r'\bmidnight\b');
 }

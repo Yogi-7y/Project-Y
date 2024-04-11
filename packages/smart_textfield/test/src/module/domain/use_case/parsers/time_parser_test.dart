@@ -13,8 +13,10 @@ void main() {
           const _expectedResult = TimeOfDay(hour: 8, minute: 0);
 
           final _result = TwelveHourParser().parse(_input);
+          final _offset = TwelveHourParser().getStartAndEndIndex(_input);
 
           expect(_result, _expectedResult);
+          expect(_offset, const (start: 0, end: 4));
         },
       );
 
@@ -25,8 +27,10 @@ void main() {
           const _expectedResult = TimeOfDay(hour: 22, minute: 0);
 
           final _result = TwelveHourParser().parse(_input);
+          final _offset = TwelveHourParser().getStartAndEndIndex(_input);
 
           expect(_result, _expectedResult);
+          expect(_offset, const (start: 0, end: 5));
         },
       );
 
@@ -37,8 +41,10 @@ void main() {
           const _expectedResult = TimeOfDay(hour: 10, minute: 0);
 
           final _result = TwelveHourParser().parse(_input);
+          final _offset = TwelveHourParser().getStartAndEndIndex(_input);
 
           expect(_result, _expectedResult);
+          expect(_offset, const (start: 0, end: 5));
         },
       );
 
@@ -50,8 +56,10 @@ void main() {
           const _expectedResult = TimeOfDay(hour: 12, minute: 0);
 
           final _result = TwelveHourParser().parse(_input);
+          final _offset = TwelveHourParser().getStartAndEndIndex(_input);
 
           expect(_result, _expectedResult);
+          expect(_offset, (start: 0, end: 7));
         },
       );
 
@@ -62,8 +70,10 @@ void main() {
           const _expectedResult = TimeOfDay(hour: 0, minute: 0);
 
           final _result = TwelveHourParser().parse(_input);
+          final _offset = TwelveHourParser().getStartAndEndIndex(_input);
 
           expect(_result, _expectedResult);
+          expect(_offset, (start: 0, end: 7));
         },
       );
     },
@@ -77,8 +87,10 @@ void main() {
         const _expectedResult = TimeOfDay(hour: 8, minute: 0);
 
         final _result = TwelveHourParser().parse(_input);
+        final _offset = TwelveHourParser().getStartAndEndIndex(_input);
 
         expect(_result, _expectedResult);
+        expect(_offset, (start: 0, end: 4));
       },
     );
 
@@ -89,8 +101,10 @@ void main() {
         const _expectedResult = TimeOfDay(hour: 22, minute: 0);
 
         final _result = TwelveHourParser().parse(_input);
+        final _offset = TwelveHourParser().getStartAndEndIndex(_input);
 
         expect(_result, _expectedResult);
+        expect(_offset, (start: 0, end: 5));
       },
     );
 
@@ -101,8 +115,10 @@ void main() {
         const _expectedResult = TimeOfDay(hour: 10, minute: 0);
 
         final _result = TwelveHourParser().parse(_input);
+        final _offset = TwelveHourParser().getStartAndEndIndex(_input);
 
         expect(_result, _expectedResult);
+        expect(_offset, (start: 0, end: 5));
       },
     );
 
@@ -113,8 +129,10 @@ void main() {
         const _expectedResult = TimeOfDay(hour: 12, minute: 0);
 
         final _result = TwelveHourParser().parse(_input);
+        final _offset = TwelveHourParser().getStartAndEndIndex(_input);
 
         expect(_result, _expectedResult);
+        expect(_offset, (start: 0, end: 5));
       },
     );
 
@@ -125,8 +143,10 @@ void main() {
         const _expectedResult = TimeOfDay(hour: 0, minute: 0);
 
         final _result = TwelveHourParser().parse(_input);
+        final _offset = TwelveHourParser().getStartAndEndIndex(_input);
 
         expect(_result, _expectedResult);
+        expect(_offset, (start: 0, end: 5));
       },
     );
   });
@@ -138,8 +158,10 @@ void main() {
       const _expectedResult = TimeOfDay(hour: 12, minute: 0);
 
       final _result = NoonParser().parse(_input);
+      final _offset = NoonParser().getStartAndEndIndex(_input);
 
       expect(_result, _expectedResult);
+      expect(_offset, (start: 16, end: 20));
     },
   );
 
@@ -150,8 +172,10 @@ void main() {
       const _expectedResult = TimeOfDay(hour: 0, minute: 0);
 
       final _result = MidnightParser().parse(_input);
+      final _offset = MidnightParser().getStartAndEndIndex(_input);
 
       expect(_result, _expectedResult);
+      expect(_offset, (start: 16, end: 24));
     },
   );
 }

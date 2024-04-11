@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:smart_textfield/smart_textfield.dart';
+import 'package:smart_textfield/src/core/date_time_extension.dart';
 import 'package:smart_textfield/src/module/presentation/smart_textfield_controller.dart';
 
 void main() {
@@ -617,6 +618,48 @@ void main() {
           expect(controller.selectedValues, isNotEmpty);
           expect(controller.text, equals(_expectedText));
           expect(controller.convertToTextSpanInfo(), equals(_expectedResult));
+        },
+      );
+    },
+  );
+
+  group(
+    'dateTimeValue',
+    () {
+      test(
+        'is null when the controller is initialized',
+        () => expect(controller.dateTimeValue, isNull),
+      );
+
+      test(
+        'is set to a value if a date time pattern is matched',
+        () {
+          final _now = DateTime.now().withoutTime;
+
+          final _expectedResult = DateTimeData(
+            dateTime: _now.add(const Duration(days: 1)),
+            value: 'tomorrow',
+            offset: (start: 7, end: 15),
+          );
+
+          controller.text = 'Do foo tomorrow';
+
+          expect(controller.dateTimeValue, equals(_expectedResult));
+        },
+      );
+
+      test(
+        'with spaces between the date and time',
+        () {
+          final _expectedResult = DateTimeData(
+            dateTime: DateTime(2018, 3, 20, 13),
+            value: '20th March 2018 at 13:00',
+            offset: (start: 10, end: 34),
+          );
+
+          controller.text = 'Do foo on 20th March 2018 at 13:00';
+
+          expect(controller.dateTimeValue, equals(_expectedResult));
         },
       );
     },

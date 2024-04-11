@@ -13,7 +13,7 @@ void main() {
       final _expectedResult = ParserValue(
         value: DateTime(_today.year, _today.month, _today.day, 12),
         start: 7,
-        end: 12,
+        end: 20,
       );
 
       final _result = _systemUnderTest.processDateTime(_input);
@@ -31,7 +31,7 @@ void main() {
       final _expectedResult = ParserValue(
         value: DateTime(_tomorrow.year, _tomorrow.month, _tomorrow.day),
         start: 7,
-        end: 15,
+        end: 27,
       );
 
       final _result = _systemUnderTest.processDateTime(_input);
@@ -47,7 +47,7 @@ void main() {
       final _expectedResult = ParserValue(
         value: DateTime(2018, 3, 20, 13),
         start: 10,
-        end: 25,
+        end: 34,
       );
 
       final _result = _systemUnderTest.processDateTime(_input);

@@ -18,6 +18,11 @@ class SmartTextFieldController extends TextEditingController {
   }
 
   late final _useCase = SmartTextFieldUseCase();
+  DateTimeData? _dateTimeValue;
+  DateTimeData? get dateTimeValue => _dateTimeValue;
+  // ignore: use_setters_to_change_properties
+  void setDateTimeValue(DateTimeData value) => _dateTimeValue = value;
+
   final List<SelectionMenu> _selectionMenus;
 
   /// Map of values selected by the user.
@@ -76,6 +81,18 @@ class SmartTextFieldController extends TextEditingController {
   String query = '';
 
   void _handleTextChange() {
+    final _dateTime = _useCase.processDateTime(text);
+
+    if (_dateTime != null) {
+      final _textSubstring = text.substring(_dateTime.start, _dateTime.end);
+
+      _dateTimeValue = DateTimeData(
+        dateTime: _dateTime.value,
+        value: _textSubstring,
+        offset: (start: _dateTime.start, end: _dateTime.end),
+      );
+    }
+
     activeSelectionMenu = _getActiveSelectionMenu();
 
     if (activeSelectionMenu == null) {
@@ -305,4 +322,35 @@ class TextSpanInfo {
 
   @override
   int get hashCode => text.hashCode ^ isHighlighted.hashCode ^ offset.hashCode;
+}
+
+@immutable
+class DateTimeData {
+  const DateTimeData({
+    required this.dateTime,
+    required this.value,
+    required this.offset,
+  });
+
+  /// The text that is converted to a DateTime object.
+  final DateTime dateTime;
+
+  /// The text value passed by the user.
+  final String value;
+
+  /// The offset of the text value in the text field.
+  final Offset offset;
+
+  @override
+  String toString() => 'DateTimeData(dateTime: $dateTime, value: $value, offset: $offset)';
+
+  @override
+  bool operator ==(covariant DateTimeData other) {
+    if (identical(this, other)) return true;
+
+    return other.dateTime == dateTime && other.value == value && other.offset == offset;
+  }
+
+  @override
+  int get hashCode => dateTime.hashCode ^ value.hashCode ^ offset.hashCode;
 }
