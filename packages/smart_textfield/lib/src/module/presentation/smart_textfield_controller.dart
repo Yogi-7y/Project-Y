@@ -83,12 +83,17 @@ class SmartTextFieldController extends TextEditingController {
   void _handleTextChange() {
     final _dateTime = _useCase.processDateTime(text);
 
-    if (_dateTime != null) {
+    if (_dateTime != null && _dateTimeValue == null) {
       final _textSubstring = text.substring(_dateTime.start, _dateTime.end);
 
       _dateTimeValue = DateTimeData(
         dateTime: _dateTime.value,
         value: _textSubstring,
+        offset: (start: _dateTime.start, end: _dateTime.end),
+      );
+
+      selectedValues['t:'] = SelectionItemMetaData(
+        item: DateTimeSelectionItem(queryContent: _textSubstring),
         offset: (start: _dateTime.start, end: _dateTime.end),
       );
     }
@@ -226,6 +231,19 @@ class SmartTextFieldController extends TextEditingController {
   }
 
   @override
+  set selection(TextSelection newSelection) {
+    print('foooo text length ${text.length}');
+    print('foooo cursor position start: ${newSelection.start}');
+    print('foooo cursor position end: ${newSelection.end}');
+
+    print('foooo ------------------');
+    if (selectedValues.isEmpty && _dateTimeValue == null) {
+      super.selection = newSelection;
+      return;
+    }
+  }
+
+  @override
   TextSpan buildTextSpan({
     required BuildContext context,
     required bool withComposing,
@@ -248,14 +266,33 @@ class SmartTextFieldController extends TextEditingController {
       style: style,
     );
 
-    final _highlight = TextSpan(
-      text: text.substring(_value.start, _value.end),
-      style: style?.copyWith(
-        decoration: TextDecoration.underline,
-        decorationStyle: TextDecorationStyle.dashed,
-        decorationThickness: 1,
-        decorationColor: Colors.grey,
+    final _highlight = WidgetSpan(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary.withOpacity(.2),
+          border: Border(
+            bottom: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+              width: 2.5,
+            ),
+          ),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Text(
+          text.substring(_value.start, _value.end),
+          style: style,
+        ),
       ),
+      alignment: PlaceholderAlignment.middle,
+      style: style,
+      baseline: TextBaseline.alphabetic,
+    );
+
+    /// Added to handle cursor positions.
+    final _highlightWhiteSpaces = List.generate(
+      text.substring(_value.start, _value.end).length - 1,
+      (index) => const WidgetSpan(child: Text('')),
     );
 
     final _after = TextSpan(
@@ -267,6 +304,7 @@ class SmartTextFieldController extends TextEditingController {
       children: [
         _before,
         _highlight,
+        ..._highlightWhiteSpaces,
         _after,
       ],
       style: style,

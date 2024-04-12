@@ -47,13 +47,11 @@ class _SmartTextFieldState extends State<SmartTextField> {
       ),
       portalFollower: Material(
         elevation: 8,
-        color: maroonColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
         child: SizedBox(
           width: _width * .8,
-          // height: 200,
           child: SingleChildScrollView(
             child: Column(
               children: List.generate(
@@ -140,10 +138,10 @@ class _SmartTextFieldState extends State<SmartTextField> {
 //   }
 // }
 
-const primaryColor = Color(0xff0f0e0e);
-const maroonColor = Color(0xff541212);
-const greenColor = Color(0xff8b9a46);
-const grey = Color(0xffeeeeee);
+// const primaryColor = Color(0xff0f0e0e);
+// const maroonColor = Color(0xff541212);
+// const greenColor = Color(0xff8b9a46);
+// const grey = Color(0xffeeeeee);
 
 @immutable
 class SmartTextFieldOverlay extends StatelessWidget {

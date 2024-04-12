@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:smart_textfield/smart_textfield.dart';
 
@@ -13,35 +11,6 @@ class MyApp extends StatelessWidget {
     return SmartTextFieldOverlay(
       child: MaterialApp(
         title: 'Material App',
-        theme: ThemeData.dark(
-          useMaterial3: true,
-        ).copyWith(
-          scaffoldBackgroundColor: const Color(0xff0f0e0e),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: maroonColor,
-          ),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: primaryColor,
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: grey),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: grey),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: grey),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Colors.red),
-            ),
-          ),
-        ),
         home: Builder(builder: (context) {
           return Scaffold(
               appBar: AppBar(
@@ -75,10 +44,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
-const primaryColor = Color(0xff0f0e0e);
-const maroonColor = Color(0xff541212);
-const greenColor = Color(0xff8b9a46);
-const grey = Color(0xffeeeeee);
+// const primaryColor = Color(0xff0f0e0e);
+// const maroonColor = Color(0xff541212);
+// const greenColor = Color(0xff8b9a46);
+// const grey = Color(0xffeeeeee);
 
 final _selectionMenus = [
   Projects(

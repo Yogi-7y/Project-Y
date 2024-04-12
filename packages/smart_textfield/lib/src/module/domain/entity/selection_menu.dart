@@ -49,3 +49,8 @@ abstract class SelectionMenuItem {
   @override
   int get hashCode => queryContent.hashCode;
 }
+
+@immutable
+class DateTimeSelectionItem extends SelectionMenuItem {
+  const DateTimeSelectionItem({required super.queryContent});
+}

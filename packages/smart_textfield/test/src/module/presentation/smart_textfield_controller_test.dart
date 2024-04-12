@@ -576,6 +576,43 @@ void main() {
       );
 
       test(
+        'with date and selected menu item',
+        () {
+          const _expectedText = 'foo bar today Project1';
+          const _expectedResult = [
+            TextSpanInfo(
+              text: 'foo bar ',
+              isHighlighted: false,
+              offset: (start: 0, end: 8),
+            ),
+            TextSpanInfo(
+              text: 'today',
+              isHighlighted: true,
+              offset: (start: 8, end: 13),
+            ),
+            TextSpanInfo(
+              text: ' ',
+              isHighlighted: false,
+              offset: (start: 13, end: 14),
+            ),
+            TextSpanInfo(
+              text: 'Project1',
+              isHighlighted: true,
+              offset: (start: 14, end: 22),
+            ),
+          ];
+
+          controller.text = 'foo bar today p:Project1';
+          controller.selectValue('p:', const Project(name: 'Project1'));
+
+          expect(controller.selectedValues, isNotEmpty);
+          expect(controller.text, equals(_expectedText));
+          expect(controller.convertToTextSpanInfo(), isNotEmpty);
+          expect(controller.convertToTextSpanInfo(), equals(_expectedResult));
+        },
+      );
+
+      test(
         'handles multiple values in selectedValues correctly',
         () {
           controller
