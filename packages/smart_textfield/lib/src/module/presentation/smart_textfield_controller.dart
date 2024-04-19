@@ -10,6 +10,7 @@ typedef Offset = ({int start, int end});
 
 const _noOffset = (start: -1, end: -1);
 
+@Deprecated('')
 class SmartTextFieldController extends TextEditingController {
   SmartTextFieldController({
     List<SelectionMenu> selectionMenus = const [],
@@ -83,6 +84,11 @@ class SmartTextFieldController extends TextEditingController {
   void _handleTextChange() {
     final _dateTime = _useCase.processDateTime(text);
 
+    if (_dateTime == null) {
+      _dateTimeValue = null;
+      selectedValues.remove('t:');
+    }
+
     if (_dateTime != null && _dateTimeValue == null) {
       final _textSubstring = text.substring(_dateTime.start, _dateTime.end);
 
@@ -96,6 +102,17 @@ class SmartTextFieldController extends TextEditingController {
         item: DateTimeSelectionItem(queryContent: _textSubstring),
         offset: (start: _dateTime.start, end: _dateTime.end),
       );
+    }
+
+    final _cursorPosition = selection.start;
+
+    final _isModifyingASelectedItem = selectedValues.entries.any((element) =>
+        element.value.offset.start >= _cursorPosition &&
+        element.value.offset.end <= _cursorPosition);
+
+    if (_isModifyingASelectedItem) {
+      selectedValues.clear();
+      return;
     }
 
     activeSelectionMenu = _getActiveSelectionMenu();
@@ -243,30 +260,12 @@ class SmartTextFieldController extends TextEditingController {
     }
   }
 
-  @override
-  TextSpan buildTextSpan({
+  InlineSpan buildHighlightedSpan({
     required BuildContext context,
-    required bool withComposing,
-    TextStyle? style,
+    required String text,
+    required TextStyle? style,
   }) {
-    final _value = _useCase.processDateTime(text);
-
-    if (_value == null)
-      return TextSpan(
-        style: style,
-        children: [
-          TextSpan(
-            text: text,
-          ),
-        ],
-      );
-
-    final _before = TextSpan(
-      text: text.substring(0, _value.start),
-      style: style,
-    );
-
-    final _highlight = WidgetSpan(
+    return WidgetSpan(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
@@ -280,7 +279,8 @@ class SmartTextFieldController extends TextEditingController {
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
-          text.substring(_value.start, _value.end),
+          // text.substring(_value.start, _value.end),
+          text,
           style: style,
         ),
       ),
@@ -288,27 +288,135 @@ class SmartTextFieldController extends TextEditingController {
       style: style,
       baseline: TextBaseline.alphabetic,
     );
+  }
 
-    /// Added to handle cursor positions.
-    final _highlightWhiteSpaces = List.generate(
-      text.substring(_value.start, _value.end).length - 1,
+  /// Build to handle the cursor position.
+  /// Builds text.length -1 empty spaces to handle the cursor position.
+  List<InlineSpan> buildHighlightedSpanWhiteSpaces({
+    required int numberOfSpans,
+  }) {
+    return List.generate(
+      numberOfSpans,
       (index) => const WidgetSpan(child: Text('')),
     );
+  }
 
-    final _after = TextSpan(
-      text: text.substring(_value.end),
-      style: style,
-    );
+  InlineSpan buildNormalTextSpan({
+    required String text,
+    required TextStyle? style,
+  }) =>
+      TextSpan(
+        text: text,
+        style: style,
+      );
+
+  @override
+  TextSpan buildTextSpan({
+    required BuildContext context,
+    required bool withComposing,
+    TextStyle? style,
+  }) {
+    final _inlineSpans = <InlineSpan>[];
+
+    final _textSpanInfo = convertToTextSpanInfo();
+
+    print('foooo: textspaninfos: $_textSpanInfo');
+
+    for (final textInfo in _textSpanInfo) {
+      if (textInfo.isHighlighted) {
+        _inlineSpans
+          ..add(
+            buildHighlightedSpan(
+              context: context,
+              text: textInfo.text,
+              style: style,
+            ),
+          )
+          ..addAll(
+            buildHighlightedSpanWhiteSpaces(
+              numberOfSpans: textInfo.text.length - 1,
+            ),
+          );
+      } else {
+        _inlineSpans.add(
+          buildNormalTextSpan(
+            text: textInfo.text,
+            style: style,
+          ),
+        );
+      }
+    }
 
     return TextSpan(
-      children: [
-        _before,
-        _highlight,
-        ..._highlightWhiteSpaces,
-        _after,
-      ],
+      children: _inlineSpans,
       style: style,
     );
+    // final _inlineSpans = convertToTextSpanInfo()
+    //     .map(
+    //       (e) => e.isHighlighted ? ,
+    //     )
+    //     .toList();
+
+    // final _value = _useCase.processDateTime(text);
+
+    // if (_value == null)
+    //   return TextSpan(
+    //     style: style,
+    //     children: [
+    //       TextSpan(
+    //         text: text,
+    //       ),
+    //     ],
+    //   );
+
+    // final _before = TextSpan(
+    //   text: text.substring(0, _value.start),
+    //   style: style,
+    // );
+
+    // final _highlight = WidgetSpan(
+    //   child: Container(
+    //     padding: const EdgeInsets.symmetric(horizontal: 4),
+    //     decoration: BoxDecoration(
+    //       color: Theme.of(context).colorScheme.primary.withOpacity(.2),
+    //       border: Border(
+    //         bottom: BorderSide(
+    //           color: Theme.of(context).colorScheme.primary,
+    //           width: 2.5,
+    //         ),
+    //       ),
+    //       borderRadius: BorderRadius.circular(4),
+    //     ),
+    //     child: Text(
+    //       text.substring(_value.start, _value.end),
+    //       style: style,
+    //     ),
+    //   ),
+    //   alignment: PlaceholderAlignment.middle,
+    //   style: style,
+    //   baseline: TextBaseline.alphabetic,
+    // );
+
+    // /// Added to handle cursor positions.
+    // final _highlightWhiteSpaces = List.generate(
+    //   text.substring(_value.start, _value.end).length - 1,
+    //   (index) => const WidgetSpan(child: Text('')),
+    // );
+
+    // final _after = TextSpan(
+    //   text: text.substring(_value.end),
+    //   style: style,
+    // );
+
+    // return TextSpan(
+    //   children: [
+    //     _before,
+    //     _highlight,
+    //     ..._highlightWhiteSpaces,
+    //     _after,
+    //   ],
+    //   style: style,
+    // );
   }
 }
 
@@ -392,3 +500,7 @@ class DateTimeData {
   @override
   int get hashCode => dateTime.hashCode ^ value.hashCode ^ offset.hashCode;
 }
+
+
+/// foo bar baz today qux @project
+/// 

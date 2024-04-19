@@ -166,6 +166,21 @@ void main() {
           expect(controller.selectedValues, equals(_expectedResult));
         },
       );
+
+      test(
+        'is removed when clearing the text',
+        () {
+          controller.text = 'foo bar p:Project1';
+          controller.selectValue('p:', const Project(name: 'Project1'));
+
+          expect(controller.selectedValues.length, equals(1));
+          expect(controller.text, equals('foo bar Project1'));
+
+          controller.selection = TextSelection.fromPosition(TextPosition(offset: 13));
+          controller.text = 'foo bar Projec';
+          expect(controller.selectedValues, isEmpty);
+        },
+      );
     },
   );
 
