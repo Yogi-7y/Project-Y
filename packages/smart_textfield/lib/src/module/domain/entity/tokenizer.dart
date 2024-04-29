@@ -65,6 +65,7 @@ abstract class Tokenizer<T extends Tokenable> {
 
       if (_match != null)
         _tokens.add(Token<T>(
+          prefix: prefix,
           rawValue: '$prefix${value.stringValue}',
           displayValue: value.stringValue,
           value: value,

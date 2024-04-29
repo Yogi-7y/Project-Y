@@ -5,13 +5,17 @@ import 'package:meta/meta.dart';
 /// Represents the extracted value form the input text.
 @immutable
 class Token<T extends Tokenable> {
-  const Token({
+  Token({
     required this.rawValue,
     required this.displayValue,
     required this.offset,
+    required this.prefix,
     this.value,
     this.isHighlighted = false,
-  });
+  }) : assert(
+          !isHighlighted || prefix.isNotEmpty,
+          'isHighlighted should be true only when prefix is not empty.',
+        );
 
   /// Value extracted directly from input without any modification.
   /// Looks like: `@JohnDoe`
@@ -24,11 +28,16 @@ class Token<T extends Tokenable> {
 
   final TokenOffset offset;
 
+  /// Indicates if the token should be highlighted in the input field.
   final bool isHighlighted;
+
+  /// Special character that invokes the tokenizer and is used to match the pattern in the input text.
+  /// Empty string means that it's a normal text.
+  final String prefix;
 
   @override
   String toString() {
-    return 'Token(rawValue: $rawValue, displayValue: $displayValue, value: $value, offset: $offset, isHighlighted: $isHighlighted)';
+    return 'Token(rawValue: $rawValue, displayValue: $displayValue, value: $value, offset: $offset, isHighlighted: $isHighlighted, prefix: $prefix)';
   }
 
   @override
@@ -39,7 +48,8 @@ class Token<T extends Tokenable> {
         other.displayValue == displayValue &&
         other.value == value &&
         other.offset == offset &&
-        other.isHighlighted == isHighlighted;
+        other.isHighlighted == isHighlighted &&
+        other.prefix == prefix;
   }
 
   @override
@@ -48,7 +58,8 @@ class Token<T extends Tokenable> {
         displayValue.hashCode ^
         value.hashCode ^
         offset.hashCode ^
-        isHighlighted.hashCode;
+        isHighlighted.hashCode ^
+        prefix.hashCode;
   }
 }
 

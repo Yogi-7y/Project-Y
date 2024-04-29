@@ -105,12 +105,13 @@ void main() {
           const _text = 'foo bar baz qux';
 
           final _result = _systemUnderTest.tokenize(text: _text);
-          const _expectedResult = [
+          final _expectedResult = [
             Token<TokenableString>(
+              prefix: '',
               rawValue: _text,
               displayValue: _text,
-              value: TokenableString(_text),
-              offset: TokenOffset(
+              value: const TokenableString(_text),
+              offset: const TokenOffset(
                 start: 0,
                 end: 15,
               ),
@@ -127,22 +128,24 @@ void main() {
           final _result =
               _systemUnderTest.tokenize(text: 'foo bar baz qux @John Doe');
 
-          const _expectedResult = [
+          final _expectedResult = [
             Token<TokenableString>(
+              prefix: '',
               rawValue: 'foo bar baz qux ',
               displayValue: 'foo bar baz qux ',
-              value: TokenableString('foo bar baz qux '),
-              offset: TokenOffset(
+              value: const TokenableString('foo bar baz qux '),
+              offset: const TokenOffset(
                 start: 0,
                 end: 16,
               ),
             ),
             Token<Project>(
+              prefix: '@',
               rawValue: '@John Doe',
               displayValue: 'John Doe',
               isHighlighted: true,
-              value: Project(name: 'John Doe'),
-              offset: TokenOffset(
+              value: const Project(name: 'John Doe'),
+              offset: const TokenOffset(
                 start: 16,
                 end: 25,
               ),
@@ -159,35 +162,39 @@ void main() {
           const _input = 'Meet @John Doe on 20th March 2018 at 1pm for Foo bar';
 
           final _expectedResult = [
-            const Token<TokenableString>(
+            Token<TokenableString>(
+              prefix: '',
               rawValue: 'Meet ',
               displayValue: 'Meet ',
-              value: TokenableString('Meet '),
-              offset: TokenOffset(
+              value: const TokenableString('Meet '),
+              offset: const TokenOffset(
                 start: 0,
                 end: 5,
               ),
             ),
-            const Token<Project>(
+            Token<Project>(
+              prefix: '@',
               rawValue: '@John Doe',
               displayValue: 'John Doe',
-              value: Project(name: 'John Doe'),
+              value: const Project(name: 'John Doe'),
               isHighlighted: true,
-              offset: TokenOffset(
+              offset: const TokenOffset(
                 start: 5,
                 end: 14,
               ),
             ),
-            const Token<TokenableString>(
+            Token<TokenableString>(
+              prefix: '',
               rawValue: ' on ',
               displayValue: ' on ',
-              value: TokenableString(' on '),
-              offset: TokenOffset(
+              value: const TokenableString(' on '),
+              offset: const TokenOffset(
                 start: 14,
                 end: 18,
               ),
             ),
             Token<TokenableDateTime>(
+              prefix: dateTimePrefix,
               rawValue: '20th March 2018 at 1pm',
               displayValue: '20th March 2018 at 1pm',
               isHighlighted: true,
@@ -197,11 +204,12 @@ void main() {
               ),
               value: TokenableDateTime(2018, 3, 20, 13),
             ),
-            const Token<TokenableString>(
+            Token<TokenableString>(
+              prefix: '',
               rawValue: ' for Foo bar',
               displayValue: ' for Foo bar',
-              value: TokenableString(' for Foo bar'),
-              offset: TokenOffset(
+              value: const TokenableString(' for Foo bar'),
+              offset: const TokenOffset(
                 start: 40,
                 end: 52,
               ),

@@ -31,7 +31,9 @@ class _SmartTextFieldState extends State<SmartTextField> {
     super.initState();
 
     _controller.addListener(() {
-      setState(() {});
+      final _tokens = _controller.tokens;
+
+      print('Tokens: $_tokens');
     });
   }
 

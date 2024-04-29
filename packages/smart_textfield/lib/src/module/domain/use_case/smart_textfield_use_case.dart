@@ -5,6 +5,8 @@ import '../entity/tokenizer.dart';
 import 'parsers/date_parsers.dart';
 import 'parsers/time_parser.dart';
 
+const dateTimePrefix = 't:';
+
 class SmartTextFieldUseCase {
   const SmartTextFieldUseCase({
     required this.tokenizers,
@@ -39,6 +41,7 @@ class SmartTextFieldUseCase {
       );
 
       _tokenizerTokens.add(Token<TokenableDateTime>(
+        prefix: dateTimePrefix,
         rawValue: text.substring(_dateTimeToken.start, _dateTimeToken.end),
         displayValue: text.substring(_dateTimeToken.start, _dateTimeToken.end),
         value: _tokenableDateTimeValue,
@@ -53,6 +56,7 @@ class SmartTextFieldUseCase {
     if (_tokenizerTokens.isEmpty)
       return [
         Token<TokenableString>(
+          prefix: '',
           rawValue: text,
           displayValue: text,
           value: TokenableString(text),
@@ -70,6 +74,7 @@ class SmartTextFieldUseCase {
       final _substring = text.substring(_offset, token.offset.start);
 
       final _token = Token<TokenableString>(
+        prefix: '',
         rawValue: _substring,
         displayValue: _substring,
         value: TokenableString(_substring),
@@ -89,6 +94,7 @@ class SmartTextFieldUseCase {
     if (_offset < text.length) {
       final _suffixText = text.substring(_offset);
       final _token = Token<TokenableString>(
+        prefix: '',
         rawValue: _suffixText,
         displayValue: _suffixText,
         value: TokenableString(_suffixText),

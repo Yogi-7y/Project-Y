@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../domain/entity/token.dart';
 import '../domain/entity/tokenizer.dart';
 import '../domain/use_case/smart_textfield_use_case.dart';
 
@@ -9,6 +10,7 @@ class SmartTextFieldController extends TextEditingController {
   });
 
   final List<Tokenizer> tokenizers;
+  final tokens = <Token>[];
 
   late final _useCase = SmartTextFieldUseCase(tokenizers: tokenizers);
 
@@ -21,6 +23,10 @@ class SmartTextFieldController extends TextEditingController {
     final _inlineSpans = <InlineSpan>[];
 
     final _tokens = _useCase.tokenize(text: text);
+
+    tokens
+      ..clear()
+      ..addAll(_tokens);
 
     for (final token in _tokens) {
       if (token.isHighlighted) {

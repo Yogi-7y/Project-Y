@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:smart_textfield/src/module/domain/entity/token.dart';
@@ -29,13 +28,14 @@ void main() {
           final _result =
               projectTokenizer.tokenize('foo bar baz qux @John Doe');
 
-          const _expectedResult = [
+          final _expectedResult = [
             Token<Project>(
+              prefix: '@',
               rawValue: '@John Doe',
               displayValue: 'John Doe',
               isHighlighted: true,
-              value: Project(name: 'John Doe'),
-              offset: TokenOffset(
+              value: const Project(name: 'John Doe'),
+              offset: const TokenOffset(
                 start: 16,
                 end: 25,
               ),
