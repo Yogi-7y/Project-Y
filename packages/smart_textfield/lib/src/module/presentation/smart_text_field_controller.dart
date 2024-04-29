@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../domain/entity/token.dart';
@@ -11,8 +12,21 @@ class SmartTextFieldController extends TextEditingController {
 
   final List<Tokenizer> tokenizers;
   final tokens = <Token>[];
+  DateTime? dateTime;
 
   late final _useCase = SmartTextFieldUseCase(tokenizers: tokenizers);
+
+  void setDateTime() {
+    final _dateTimeToken = tokens.firstWhereOrNull(
+      (token) => token.prefix == dateTimePrefix,
+    );
+
+    final _value = _dateTimeToken?.value;
+
+    if (_value is TokenableDateTime) {
+      dateTime = _value;
+    }
+  }
 
   @override
   TextSpan buildTextSpan({
@@ -27,6 +41,8 @@ class SmartTextFieldController extends TextEditingController {
     tokens
       ..clear()
       ..addAll(_tokens);
+
+    setDateTime();
 
     for (final token in _tokens) {
       if (token.isHighlighted) {

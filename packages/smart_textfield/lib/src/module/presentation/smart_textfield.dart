@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 
-import '../domain/entity/tokenizer.dart';
 import 'smart_text_field_controller.dart';
 
 class SmartTextField extends StatefulWidget {
   const SmartTextField({
-    required this.tokenizers,
+    required this.controller,
     super.key,
   });
 
-  final List<Tokenizer> tokenizers;
+  final SmartTextFieldController controller;
 
   @override
   State<SmartTextField> createState() => _SmartTextFieldState();
 }
 
 class _SmartTextFieldState extends State<SmartTextField> {
-  late final _controller = SmartTextFieldController(
-    tokenizers: widget.tokenizers,
-  );
-
   late final _globalKey = GlobalKey<FormState>();
 
   String query = '';
@@ -29,12 +24,6 @@ class _SmartTextFieldState extends State<SmartTextField> {
   @override
   void initState() {
     super.initState();
-
-    _controller.addListener(() {
-      final _tokens = _controller.tokens;
-
-      print('Tokens: $_tokens');
-    });
   }
 
   @override
@@ -71,7 +60,7 @@ class _SmartTextFieldState extends State<SmartTextField> {
       child: TextField(
         autofocus: true,
         key: _globalKey,
-        controller: _controller,
+        controller: widget.controller,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
