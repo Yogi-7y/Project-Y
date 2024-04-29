@@ -178,4 +178,18 @@ void main() {
       expect(_offset, (start: 16, end: 24));
     },
   );
+
+  test(
+    'Do foo at 13:00 and update status',
+    () {
+      const _input = 'Do foo at 13:00 and update status';
+      const _expectedResult = TimeOfDay(hour: 13, minute: 0);
+
+      final _result = TwentyFourHourParser().parse(_input);
+      final _offset = TwentyFourHourParser().getStartAndEndIndex(_input);
+
+      expect(_result, _expectedResult);
+      expect(_offset, (start: 10, end: 15));
+    },
+  );
 }

@@ -25,12 +25,11 @@ abstract class Tokenizer<T extends Tokenable> {
   final valuesWithPrefix = <({String prefixValue, T value})>[];
 
   void _populateValuesWithPrefix() {
-    final _values = values.map((e) => (prefixValue: '$prefix${e.stringValue}', value: e)).toList();
+    final _values = values
+        .map((e) => (prefixValue: '$prefix${e.stringValue}', value: e))
+        .toList();
     valuesWithPrefix.addAll(_values);
   }
-
-  @protected
-  WidgetBuilder suggestionBuilder(BuildContext context, Token<T> token);
 
   @visibleForTesting
   List<T> suggestions(String input) {
@@ -69,6 +68,7 @@ abstract class Tokenizer<T extends Tokenable> {
           rawValue: '$prefix${value.stringValue}',
           displayValue: value.stringValue,
           value: value,
+          isHighlighted: true,
           offset: TokenOffset(
             start: _match.start,
             end: _match.end,

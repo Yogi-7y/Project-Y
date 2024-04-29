@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
+import '../use_case/smart_textfield_use_case.dart';
+
 @immutable
 class ParserValue<T> {
   const ParserValue({

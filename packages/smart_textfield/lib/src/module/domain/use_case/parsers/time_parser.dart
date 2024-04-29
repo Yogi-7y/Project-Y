@@ -51,8 +51,9 @@ class TwelveHourParser extends TimeParser {
 
       final _timeWithoutAmPm = time.replaceAll(RegExp('am|pm'), '').trim();
 
-      final _timeParts =
-          _timeWithoutAmPm.contains(':') ? _timeWithoutAmPm.split(':') : [_timeWithoutAmPm, '00'];
+      final _timeParts = _timeWithoutAmPm.contains(':')
+          ? _timeWithoutAmPm.split(':')
+          : [_timeWithoutAmPm, '00'];
 
       final hour = int.parse(_timeParts[0]);
       final minute = int.parse(_timeParts[1]);
@@ -66,10 +67,8 @@ class TwelveHourParser extends TimeParser {
   }
 
   @override
-  RegExp get regExp => RegExp(r'\b((?:[01]?\d|2[0-3]):[0-5]\d\s*(?:am|pm)?|1?[0-9]\s*(?:am|pm))\b');
-
-  // @override
-  // String get regExPattern => r'\b((?:[01]?\d|2[0-3]):[0-5]\d\s*(?:am|pm)?|1?[0-9]\s*(?:am|pm))\b';
+  RegExp get regExp => RegExp(
+      r'\b((?:[01]?\d|2[0-3]):[0-5]\d\s*(?:am|pm)?|1?[0-9]\s*(?:am|pm))\b');
 }
 
 class TwentyFourHourParser extends TimeParser {

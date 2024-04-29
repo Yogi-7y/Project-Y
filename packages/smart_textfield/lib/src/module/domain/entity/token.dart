@@ -4,12 +4,13 @@ import 'package:meta/meta.dart';
 
 /// Represents the extracted value form the input text.
 @immutable
-class Token<T> {
+class Token<T extends Tokenable> {
   const Token({
     required this.rawValue,
     required this.displayValue,
     required this.offset,
-    required this.value,
+    this.value,
+    this.isHighlighted = false,
   });
 
   /// Value extracted directly from input without any modification.
@@ -19,13 +20,15 @@ class Token<T> {
   /// Value that will be displayed in the input field once the token is matched for better readability.
   final String displayValue;
 
-  final T value;
+  final T? value;
 
   final TokenOffset offset;
 
+  final bool isHighlighted;
+
   @override
   String toString() {
-    return 'Token(rawValue: $rawValue, displayValue: $displayValue, value: $value, offset: $offset)';
+    return 'Token(rawValue: $rawValue, displayValue: $displayValue, value: $value, offset: $offset, isHighlighted: $isHighlighted)';
   }
 
   @override
@@ -35,12 +38,17 @@ class Token<T> {
     return other.rawValue == rawValue &&
         other.displayValue == displayValue &&
         other.value == value &&
-        other.offset == offset;
+        other.offset == offset &&
+        other.isHighlighted == isHighlighted;
   }
 
   @override
   int get hashCode {
-    return rawValue.hashCode ^ displayValue.hashCode ^ value.hashCode ^ offset.hashCode;
+    return rawValue.hashCode ^
+        displayValue.hashCode ^
+        value.hashCode ^
+        offset.hashCode ^
+        isHighlighted.hashCode;
   }
 }
 

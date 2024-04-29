@@ -11,14 +11,14 @@ typedef Offset = ({int start, int end});
 const _noOffset = (start: -1, end: -1);
 
 @Deprecated('')
-class SmartTextFieldController extends TextEditingController {
-  SmartTextFieldController({
+class SmartTextFieldControllerDeprecated extends TextEditingController {
+  SmartTextFieldControllerDeprecated({
     List<SelectionMenu> selectionMenus = const [],
   }) : _selectionMenus = selectionMenus {
     addListener(_handleTextChange);
   }
 
-  late final _useCase = SmartTextFieldUseCase();
+  late final _useCase = const SmartTextFieldUseCase(tokenizers: []);
   DateTimeData? _dateTimeValue;
   DateTimeData? get dateTimeValue => _dateTimeValue;
   // ignore: use_setters_to_change_properties
@@ -131,7 +131,8 @@ class SmartTextFieldController extends TextEditingController {
     final _currentWord = text.isNotEmpty ? text.split(' ').last : '';
 
     // final _lastTwoLetters = text.length >= 2 ? _currentWord.substring(0, text.length - 2) : '';
-    final _lastTwoLetters = text.length >= 2 ? text.substring(text.length - 2) : '';
+    final _lastTwoLetters =
+        text.length >= 2 ? text.substring(text.length - 2) : '';
 
     if (_currentWord.isEmpty) return null;
     if (_lastTwoLetters == '  ') return null;
@@ -178,13 +179,15 @@ class SmartTextFieldController extends TextEditingController {
         .toList();
   }
 
-  bool get isCursorAtEnd => selection.start == text.length && selection.end == text.length;
+  bool get isCursorAtEnd =>
+      selection.start == text.length && selection.end == text.length;
 
   /// Boolean to determine if it needs to update the offset of the selected values based on the cursor position.
   /// Returns `true` if the cursor is not at the end and it's before any of the items, `false` otherwise.
   bool get updateSelectedValues {
     if (isCursorAtEnd) return false;
-    return selectedValues.values.any((item) => selection.start < item.offset.start);
+    return selectedValues.values
+        .any((item) => selection.start < item.offset.start);
   }
 
   void clearSelectionMenu() {
@@ -249,11 +252,6 @@ class SmartTextFieldController extends TextEditingController {
 
   @override
   set selection(TextSelection newSelection) {
-    print('foooo text length ${text.length}');
-    print('foooo cursor position start: ${newSelection.start}');
-    print('foooo cursor position end: ${newSelection.end}');
-
-    print('foooo ------------------');
     if (selectedValues.isEmpty && _dateTimeValue == null) {
       super.selection = newSelection;
       return;
@@ -319,8 +317,6 @@ class SmartTextFieldController extends TextEditingController {
     final _inlineSpans = <InlineSpan>[];
 
     final _textSpanInfo = convertToTextSpanInfo();
-
-    print('foooo: textspaninfos: $_textSpanInfo');
 
     for (final textInfo in _textSpanInfo) {
       if (textInfo.isHighlighted) {
@@ -457,13 +453,16 @@ class TextSpanInfo {
   final Offset offset;
 
   @override
-  String toString() => 'TextSpanInfo(text: $text, isHighlighted: $isHighlighted, offset: $offset)';
+  String toString() =>
+      'TextSpanInfo(text: $text, isHighlighted: $isHighlighted, offset: $offset)';
 
   @override
   bool operator ==(covariant TextSpanInfo other) {
     if (identical(this, other)) return true;
 
-    return other.text == text && other.isHighlighted == isHighlighted && other.offset == offset;
+    return other.text == text &&
+        other.isHighlighted == isHighlighted &&
+        other.offset == offset;
   }
 
   @override
@@ -488,13 +487,16 @@ class DateTimeData {
   final Offset offset;
 
   @override
-  String toString() => 'DateTimeData(dateTime: $dateTime, value: $value, offset: $offset)';
+  String toString() =>
+      'DateTimeData(dateTime: $dateTime, value: $value, offset: $offset)';
 
   @override
   bool operator ==(covariant DateTimeData other) {
     if (identical(this, other)) return true;
 
-    return other.dateTime == dateTime && other.value == value && other.offset == offset;
+    return other.dateTime == dateTime &&
+        other.value == value &&
+        other.offset == offset;
   }
 
   @override

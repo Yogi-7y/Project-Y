@@ -26,12 +26,14 @@ void main() {
       test(
         'should extract tokens based on prefix and value',
         () {
-          final _result = projectTokenizer.tokenize('foo bar baz qux @John Doe');
+          final _result =
+              projectTokenizer.tokenize('foo bar baz qux @John Doe');
 
           const _expectedResult = [
             Token<Project>(
               rawValue: '@John Doe',
               displayValue: 'John Doe',
+              isHighlighted: true,
               value: Project(name: 'John Doe'),
               offset: TokenOffset(
                 start: 16,
@@ -90,11 +92,6 @@ class ProjectTokenizer extends Tokenizer<Project> {
     required super.values,
     super.prefix = '@',
   });
-
-  @override
-  WidgetBuilder suggestionBuilder(BuildContext context, Token<Project> token) {
-    throw UnimplementedError();
-  }
 }
 
 @immutable
@@ -103,7 +100,11 @@ class Project implements Tokenable {
   const Project({
     required this.name,
   });
+
   final String name;
+
+  @override
+  String get stringValue => name;
 
   @override
   String toString() => 'Project(name: $name)';
@@ -117,7 +118,4 @@ class Project implements Tokenable {
 
   @override
   int get hashCode => name.hashCode;
-
-  @override
-  String get stringValue => name;
 }
