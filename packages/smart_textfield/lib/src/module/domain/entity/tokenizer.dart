@@ -31,22 +31,23 @@ abstract class Tokenizer<T extends Tokenable> {
     valuesWithPrefix.addAll(_values);
   }
 
-  @visibleForTesting
   List<T> suggestions(String input) {
     /// find if the prefix is being used anywhere in the input
     /// if not, return an empty list
     /// If yes, then take the substring from that index forward till the end of the input.
     /// Then, find the matching values from the values list and return them.
 
+    final _caseInsensitiveInput = input.toLowerCase();
+
     final _prefixPattern = RegExp(prefix);
-    final _prefixMatch = _prefixPattern.firstMatch(input);
+    final _prefixMatch = _prefixPattern.firstMatch(_caseInsensitiveInput);
 
     if (_prefixMatch != null) {
-      final _query = input.substring(_prefixMatch.start);
+      final _query = _caseInsensitiveInput.substring(_prefixMatch.start);
 
       final _suggestions = valuesWithPrefix
           .where(
-            (value) => value.prefixValue.startsWith(_query),
+            (value) => value.prefixValue.toLowerCase().startsWith(_query),
           )
           .toList();
 

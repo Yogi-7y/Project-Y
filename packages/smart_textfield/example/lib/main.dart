@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_textfield/smart_textfield.dart';
 
@@ -12,9 +11,7 @@ class MyApp extends StatelessWidget {
     return SmartTextFieldOverlay(
       child: MaterialApp(
         title: 'Material App',
-        home: Builder(builder: (context) {
-          return const SmartTextFieldScreen();
-        }),
+        home: Builder(builder: (context) => const SmartTextFieldScreen()),
       ),
     );
   }
@@ -31,7 +28,10 @@ class SmartTextFieldScreen extends StatefulWidget {
 
 class _SmartTextFieldScreenState extends State<SmartTextFieldScreen> {
   late final _controller = SmartTextFieldController(
-    tokenizers: [],
+    tokenizers: [
+      ProjectTokenizer(values: _projects),
+      LabelTokenizer(values: _labels),
+    ],
   );
 
   // ignore: type_annotate_public_apis
@@ -59,7 +59,7 @@ class _SmartTextFieldScreenState extends State<SmartTextFieldScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Material App Bar'),
+        title: const Text('Smart TextField'),
       ),
       body: Center(
         child: Text(
@@ -97,3 +97,60 @@ class _SmartTextFieldScreenState extends State<SmartTextFieldScreen> {
   String showFormattedDateTime(DateTime dateTime) =>
       '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute}';
 }
+
+@immutable
+class ProjectTokenizer extends Tokenizer<Project> {
+  ProjectTokenizer({
+    required super.values,
+    super.prefix = '@',
+  });
+}
+
+@immutable
+// ignore: avoid_implementing_value_types
+class Project implements Tokenable {
+  const Project({
+    required this.name,
+  });
+
+  final String name;
+
+  @override
+  String get stringValue => name;
+}
+
+final _projects = [
+  const Project(name: 'John Doe'),
+  const Project(name: 'Jane Doe'),
+  const Project(name: 'Baz qux'),
+  const Project(name: 'Foo bar'),
+  const Project(name: 'Foo baz'),
+  const Project(name: 'Foo qux'),
+  const Project(name: 'Foo foo'),
+];
+
+@immutable
+class LabelTokenizer extends Tokenizer<Label> {
+  LabelTokenizer({
+    required super.values,
+    super.prefix = '#',
+  });
+}
+
+@immutable
+// ignore: avoid_implementing_value_types
+class Label implements Tokenable {
+  const Label({required this.name});
+
+  final String name;
+
+  @override
+  String get stringValue => name;
+}
+
+final _labels = [
+  const Label(name: 'Label 1'),
+  const Label(name: 'Label 2'),
+  const Label(name: 'Label 3'),
+  const Label(name: 'Label 4'),
+];

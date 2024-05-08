@@ -30,33 +30,8 @@ class _SmartTextFieldState extends State<SmartTextField> {
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
 
-    return PortalTarget(
-      // visible: _controller.activeSelectionMenu != null,
-      visible: false,
-      anchor: const Aligned(
-        follower: Alignment.bottomRight,
-        target: Alignment.topRight,
-      ),
-      portalFollower: Material(
-        elevation: 8,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: SizedBox(
-          width: _width * .8,
-          child: SingleChildScrollView(
-            child: Column(
-              children: List.generate(
-                  // _controller.activeOptions.length,
-                  0,
-                  (index) => ListTile(
-                        title: const Text(''),
-                        onTap: () {},
-                      )),
-            ),
-          ),
-        ),
-      ),
+    return ValueListenableBuilder(
+      valueListenable: widget.controller.suggestions,
       child: TextField(
         autofocus: true,
         key: _globalKey,
@@ -66,6 +41,37 @@ class _SmartTextFieldState extends State<SmartTextField> {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
+      ),
+      builder: (context, suggestions, child) => PortalTarget(
+        visible: suggestions.isNotEmpty,
+        anchor: const Aligned(
+          follower: Alignment.bottomRight,
+          target: Alignment.topRight,
+        ),
+        portalFollower: Material(
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: SizedBox(
+            width: _width * .8,
+            child: SingleChildScrollView(
+              child: Column(
+                children: List.generate(
+                  suggestions.length,
+                  (index) {
+                    final _suggestion = suggestions[index];
+                    return ListTile(
+                      title: Text(_suggestion.stringValue),
+                      onTap: () {},
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+        child: child!,
       ),
     );
   }

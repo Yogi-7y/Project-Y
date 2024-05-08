@@ -15,6 +15,7 @@ class SmartTextFieldController extends TextEditingController {
   DateTime? dateTime;
 
   late final _useCase = SmartTextFieldUseCase(tokenizers: tokenizers);
+  late final suggestions = ValueNotifier<List<Tokenable>>([]);
 
   void setDateTime() {
     final _dateTimeToken = tokens.firstWhereOrNull(
@@ -26,6 +27,26 @@ class SmartTextFieldController extends TextEditingController {
     if (_value is TokenableDateTime) {
       dateTime = _value;
     }
+  }
+
+  void _updateSuggestions() {
+    suggestions.value = [];
+
+    for (final tokenizer in tokenizers) {
+      final _suggestions = tokenizer.suggestions(text);
+
+      if (_suggestions.isNotEmpty) {
+        suggestions.value.addAll(_suggestions);
+        suggestions.notifyListeners();
+        return;
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    suggestions.dispose();
+    super.dispose();
   }
 
   @override
@@ -43,6 +64,11 @@ class SmartTextFieldController extends TextEditingController {
       ..addAll(_tokens);
 
     setDateTime();
+
+    Future.delayed(
+      Duration.zero,
+      _updateSuggestions,
+    );
 
     for (final token in _tokens) {
       if (token.isHighlighted) {
