@@ -36,17 +36,42 @@ class _SmartTextFieldScreenState extends State<SmartTextFieldScreen> {
 
   // ignore: type_annotate_public_apis
   var dateTime = DateTime.now();
+  Project? _selectedProject;
+  Label? _selectedLabel;
 
   @override
   void initState() {
     super.initState();
 
     _controller.addListener(() {
-      if (_controller.dateTime != null) {
+      if (_controller.highlightedDateTime != null) {
         setState(() {
-          dateTime = _controller.dateTime!;
+          dateTime = _controller.highlightedDateTime!;
         });
       }
+    });
+
+    _controller.highlightedTokens.addListener(() {
+      final _tokens = _controller.highlightedTokens.value;
+
+      if (_tokens['@'] != null) {
+        _selectedProject = _tokens['@']?.value as Project?;
+      } else {
+        _selectedProject = null;
+      }
+
+      if (_tokens['#'] != null) {
+        _selectedLabel = _tokens['#']?.value as Label?;
+      } else {
+        _selectedLabel = null;
+      }
+
+      Future.delayed(
+        Duration.zero,
+        () {
+          if (mounted) setState(() {});
+        },
+      );
     });
   }
 
@@ -62,9 +87,16 @@ class _SmartTextFieldScreenState extends State<SmartTextFieldScreen> {
         title: const Text('Smart TextField'),
       ),
       body: Center(
-        child: Text(
-          showFormattedDateTime(dateTime),
-          style: const TextStyle(fontSize: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              showFormattedDateTime(dateTime),
+              style: const TextStyle(fontSize: 20),
+            ),
+            Text('Project: ${_selectedProject?.name ?? 'None'}'),
+            Text('Label: ${_selectedLabel?.name ?? 'None'}')
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -77,7 +109,9 @@ class _SmartTextFieldScreenState extends State<SmartTextFieldScreen> {
             ),
             builder: (context) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20).copyWith(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20)
+                        .copyWith(
                   bottom: MediaQuery.of(context).viewInsets.bottom + 20,
                 ),
                 child: SmartTextField(

@@ -11,22 +11,32 @@ class SmartTextFieldController extends TextEditingController {
   });
 
   final List<Tokenizer> tokenizers;
-  final tokens = <Token>[];
-  final highlightedTokens = <String, Token>{};
-  DateTime? dateTime;
+
+  final _tokens = <Token>[];
+
+  /// DateTime that was identified from the text.
+  DateTime? highlightedDateTime;
+
+  /// Tokens that were identified from the text based on the [tokenizers].
+  /// To read the value of a specific token, lookup via its prefix.
+  /// For example, to get the value of a token with the prefix '@', use:
+  /// ```dart
+  /// final value = highlightedTokens['@']?.value as Type?;
+  /// ```
+  final highlightedTokens = ValueNotifier<Map<String, Token>>({});
 
   late final _useCase = SmartTextFieldUseCase(tokenizers: tokenizers);
   late final suggestions = ValueNotifier<List<Tokenable>>([]);
 
   void setDateTime() {
-    final _dateTimeToken = tokens.firstWhereOrNull(
+    final _dateTimeToken = _tokens.firstWhereOrNull(
       (token) => token.prefix == dateTimePrefix,
     );
 
     final _value = _dateTimeToken?.value;
 
     if (_value is TokenableDateTime) {
-      dateTime = _value;
+      highlightedDateTime = _value;
     }
   }
 
@@ -58,11 +68,14 @@ class SmartTextFieldController extends TextEditingController {
   }) {
     final _inlineSpans = <InlineSpan>[];
 
-    final _tokens = _useCase.tokenize(text: text);
+    final _tokenizeResult = _useCase.tokenize(text: text);
 
-    tokens
+    highlightedTokens.value.clear();
+    highlightedTokens.notifyListeners();
+
+    _tokens
       ..clear()
-      ..addAll(_tokens);
+      ..addAll(_tokenizeResult);
 
     setDateTime();
 
@@ -71,7 +84,7 @@ class SmartTextFieldController extends TextEditingController {
       _updateSuggestions,
     );
 
-    for (final token in _tokens) {
+    for (final token in _tokenizeResult) {
       if (token.isHighlighted) {
         _inlineSpans
           ..add(
@@ -89,7 +102,8 @@ class SmartTextFieldController extends TextEditingController {
             ),
           );
 
-        highlightedTokens[token.prefix] = token;
+        highlightedTokens.value[token.prefix] = token;
+        highlightedTokens.notifyListeners();
       } else {
         _inlineSpans.add(
           buildNormalTextSpan(
