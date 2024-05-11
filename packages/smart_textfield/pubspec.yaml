@@ -1,11 +1,11 @@
 name: smart_textfield
-description: "Smart TextField"
+description: "TextField that can extract relevant information from the raw text input."
 version: 0.0.1
-homepage:
+repository: https://github.com/Yogi-7y/Project-Y
 
 environment:
   sdk: ">=3.2.6 <4.0.0"
-  flutter: ">=1.17.0"
+  flutter: ">=3.16.9"
 
 dependencies:
   collection: ^1.18.0
