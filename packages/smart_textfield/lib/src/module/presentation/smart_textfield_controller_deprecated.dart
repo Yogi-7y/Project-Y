@@ -12,6 +12,7 @@ const _noOffset = (start: -1, end: -1);
 
 @Deprecated('')
 class SmartTextFieldControllerDeprecated extends TextEditingController {
+  // ignore: deprecated_consistency
   SmartTextFieldControllerDeprecated({
     List<SelectionMenu> selectionMenus = const [],
   }) : _selectionMenus = selectionMenus {
@@ -131,8 +132,7 @@ class SmartTextFieldControllerDeprecated extends TextEditingController {
     final _currentWord = text.isNotEmpty ? text.split(' ').last : '';
 
     // final _lastTwoLetters = text.length >= 2 ? _currentWord.substring(0, text.length - 2) : '';
-    final _lastTwoLetters =
-        text.length >= 2 ? text.substring(text.length - 2) : '';
+    final _lastTwoLetters = text.length >= 2 ? text.substring(text.length - 2) : '';
 
     if (_currentWord.isEmpty) return null;
     if (_lastTwoLetters == '  ') return null;
@@ -179,15 +179,13 @@ class SmartTextFieldControllerDeprecated extends TextEditingController {
         .toList();
   }
 
-  bool get isCursorAtEnd =>
-      selection.start == text.length && selection.end == text.length;
+  bool get isCursorAtEnd => selection.start == text.length && selection.end == text.length;
 
   /// Boolean to determine if it needs to update the offset of the selected values based on the cursor position.
   /// Returns `true` if the cursor is not at the end and it's before any of the items, `false` otherwise.
   bool get updateSelectedValues {
     if (isCursorAtEnd) return false;
-    return selectedValues.values
-        .any((item) => selection.start < item.offset.start);
+    return selectedValues.values.any((item) => selection.start < item.offset.start);
   }
 
   void clearSelectionMenu() {
@@ -453,16 +451,13 @@ class TextSpanInfo {
   final Offset offset;
 
   @override
-  String toString() =>
-      'TextSpanInfo(text: $text, isHighlighted: $isHighlighted, offset: $offset)';
+  String toString() => 'TextSpanInfo(text: $text, isHighlighted: $isHighlighted, offset: $offset)';
 
   @override
   bool operator ==(covariant TextSpanInfo other) {
     if (identical(this, other)) return true;
 
-    return other.text == text &&
-        other.isHighlighted == isHighlighted &&
-        other.offset == offset;
+    return other.text == text && other.isHighlighted == isHighlighted && other.offset == offset;
   }
 
   @override
@@ -487,22 +482,15 @@ class DateTimeData {
   final Offset offset;
 
   @override
-  String toString() =>
-      'DateTimeData(dateTime: $dateTime, value: $value, offset: $offset)';
+  String toString() => 'DateTimeData(dateTime: $dateTime, value: $value, offset: $offset)';
 
   @override
   bool operator ==(covariant DateTimeData other) {
     if (identical(this, other)) return true;
 
-    return other.dateTime == dateTime &&
-        other.value == value &&
-        other.offset == offset;
+    return other.dateTime == dateTime && other.value == value && other.offset == offset;
   }
 
   @override
   int get hashCode => dateTime.hashCode ^ value.hashCode ^ offset.hashCode;
 }
-
-
-/// foo bar baz today qux @project
-/// 

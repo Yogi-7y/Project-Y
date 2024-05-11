@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'token.dart';
 
 /// [Tokenizer] is a class responsible for extracting specific values from user input
