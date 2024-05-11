@@ -12,6 +12,7 @@ class SmartTextFieldController extends TextEditingController {
 
   final List<Tokenizer> tokenizers;
   final tokens = <Token>[];
+  final highlightedTokens = <String, Token>{};
   DateTime? dateTime;
 
   late final _useCase = SmartTextFieldUseCase(tokenizers: tokenizers);
@@ -82,8 +83,13 @@ class SmartTextFieldController extends TextEditingController {
           )
           ..addAll(
             buildHighlightedSpanWhiteSpaces(
-                numberOfSpans: token.displayValue.length - 1),
+              numberOfSpans: token.prefix == dateTimePrefix
+                  ? token.displayValue.length - 1
+                  : token.displayValue.length,
+            ),
           );
+
+        highlightedTokens[token.prefix] = token;
       } else {
         _inlineSpans.add(
           buildNormalTextSpan(

@@ -25,8 +25,7 @@ void main() {
       test(
         'should extract tokens based on prefix and value',
         () {
-          final _result =
-              projectTokenizer.tokenize('foo bar baz qux @John Doe');
+          final _result = projectTokenizer.tokenize('foo bar baz qux @John Doe');
 
           final _expectedResult = [
             Token<Project>(
@@ -118,4 +117,7 @@ class Project implements Tokenable {
 
   @override
   int get hashCode => name.hashCode;
+
+  @override
+  String get prefix => '@';
 }

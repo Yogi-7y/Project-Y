@@ -22,4 +22,7 @@ class TokenableString implements Tokenable {
 
   @override
   int get hashCode => value.hashCode;
+
+  @override
+  String get prefix => '';
 }

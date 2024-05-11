@@ -77,9 +77,7 @@ class _SmartTextFieldScreenState extends State<SmartTextFieldScreen> {
             ),
             builder: (context) {
               return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20)
-                        .copyWith(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20).copyWith(
                   bottom: MediaQuery.of(context).viewInsets.bottom + 20,
                 ),
                 child: SmartTextField(
@@ -117,6 +115,9 @@ class Project implements Tokenable {
 
   @override
   String get stringValue => name;
+
+  @override
+  String get prefix => '@';
 }
 
 final _projects = [
@@ -146,6 +147,9 @@ class Label implements Tokenable {
 
   @override
   String get stringValue => name;
+
+  @override
+  String get prefix => '#';
 }
 
 final _labels = [

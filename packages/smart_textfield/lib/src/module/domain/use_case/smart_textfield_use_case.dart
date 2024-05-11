@@ -123,8 +123,7 @@ class SmartTextFieldUseCase {
 
       if (_date == null || _time == null) return null;
 
-      final _dateTime = DateTime(
-          _date.year, _date.month, _date.day, _time.hour, _time.minute);
+      final _dateTime = DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
 
       final _interval = (
         start: _dateInterval!.start,
@@ -184,4 +183,7 @@ class TokenableDateTime extends DateTime implements Tokenable {
 
   @override
   String get stringValue => '$year';
+
+  @override
+  String get prefix => dateTimePrefix;
 }

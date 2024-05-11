@@ -63,7 +63,31 @@ class _SmartTextFieldState extends State<SmartTextField> {
                     final _suggestion = suggestions[index];
                     return ListTile(
                       title: Text(_suggestion.stringValue),
-                      onTap: () {},
+                      onTap: () {
+                        /// current cursor position
+                        final _cursorPosition = widget.controller.selection.base.offset;
+
+                        /// text before cursor
+                        final _textBeforeCursor =
+                            widget.controller.text.substring(0, _cursorPosition);
+
+                        /// text after cursor
+                        final _textAfterCursor = widget.controller.text.substring(_cursorPosition);
+
+                        /// prefix index
+
+                        final _prefixIndex = _textBeforeCursor.lastIndexOf(_suggestion.prefix);
+
+                        /// value to be inserted
+                        final _value = _suggestion.prefix + _suggestion.stringValue;
+
+                        /// new text
+                        /// text before cursor + value + text after cursor
+                        final _newText =
+                            '${_textBeforeCursor.substring(0, _prefixIndex)}$_value$_textAfterCursor';
+
+                        widget.controller.text = _newText;
+                      },
                     );
                   },
                 ),

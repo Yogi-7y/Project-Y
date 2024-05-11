@@ -25,9 +25,7 @@ abstract class Tokenizer<T extends Tokenable> {
   final valuesWithPrefix = <({String prefixValue, T value})>[];
 
   void _populateValuesWithPrefix() {
-    final _values = values
-        .map((e) => (prefixValue: '$prefix${e.stringValue}', value: e))
-        .toList();
+    final _values = values.map((e) => (prefixValue: '$prefix${e.stringValue}', value: e)).toList();
     valuesWithPrefix.addAll(_values);
   }
 

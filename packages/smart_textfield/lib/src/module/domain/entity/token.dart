@@ -91,9 +91,12 @@ class TokenOffset {
 abstract class Tokenable {
   const Tokenable({
     required this.stringValue,
+    required this.prefix,
   });
 
   final String stringValue;
+
+  final String prefix;
 
   @override
   String toString() => 'Tokenable(stringValue: $stringValue)';
