@@ -21,11 +21,6 @@ class SmartTextFieldUseCase {
 
     final _tokenizerTokens = <Token>[];
 
-    for (final tokenizer in tokenizers) {
-      final _tokensFromTokenizer = tokenizer.tokenize(text);
-      _tokenizerTokens.addAll(_tokensFromTokenizer);
-    }
-
     final _dateTimeToken = processDateTime(text);
 
     if (_dateTimeToken != null) {
@@ -40,17 +35,25 @@ class SmartTextFieldUseCase {
         _dateTimeToken.value.microsecond,
       );
 
-      _tokenizerTokens.add(Token<TokenableDateTime>(
-        prefix: dateTimePrefix,
-        rawValue: text.substring(_dateTimeToken.start, _dateTimeToken.end),
-        displayValue: text.substring(_dateTimeToken.start, _dateTimeToken.end),
-        value: _tokenableDateTimeValue,
-        isHighlighted: true,
-        offset: TokenOffset(
-          start: _dateTimeToken.start,
-          end: _dateTimeToken.end,
+      _tokenizerTokens.add(
+        Token<TokenableDateTime>(
+          prefix: dateTimePrefix,
+          rawValue: text.substring(_dateTimeToken.start, _dateTimeToken.end),
+          displayValue:
+              text.substring(_dateTimeToken.start, _dateTimeToken.end),
+          value: _tokenableDateTimeValue,
+          isHighlighted: true,
+          offset: TokenOffset(
+            start: _dateTimeToken.start,
+            end: _dateTimeToken.end,
+          ),
         ),
-      ));
+      );
+    }
+
+    for (final tokenizer in tokenizers) {
+      final _tokensFromTokenizer = tokenizer.tokenize(text);
+      _tokenizerTokens.addAll(_tokensFromTokenizer);
     }
 
     if (_tokenizerTokens.isEmpty)
@@ -123,7 +126,8 @@ class SmartTextFieldUseCase {
 
       if (_date == null || _time == null) return null;
 
-      final _dateTime = DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
+      final _dateTime = DateTime(
+          _date.year, _date.month, _date.day, _time.hour, _time.minute);
 
       final _interval = (
         start: _dateInterval!.start,
