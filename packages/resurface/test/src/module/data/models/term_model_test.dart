@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:resurface/src/module/data/models/term_model.dart';
-import 'package:resurface/src/module/domain/entity/term.dart';
 
 void main() {
   test('serialize term', () {

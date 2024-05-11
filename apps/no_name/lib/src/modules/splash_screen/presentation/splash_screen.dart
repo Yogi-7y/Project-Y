@@ -17,7 +17,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with TermsModule {
   @override
   void initState() {
     super.initState();
-    print('splash screen init');
     unawaited(_asyncInit());
   }
 

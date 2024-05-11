@@ -44,3 +44,13 @@ app.*.map.json
 
 .vscode/
 .fvm/
+
+
+**/example/android/
+**/example/ios/
+**/example/web/
+examples/**/android/
+examples/**/ios/
+examples/**/web/
+examples/**/windows/
+examples/**/macos/
