@@ -1,4 +1,4 @@
-## 0.03
+## 0.0.3
 
 - Simplified Example
 - Update README.md
