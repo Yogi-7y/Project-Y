@@ -53,8 +53,11 @@ class _SmartTextFieldState extends State<SmartTextField> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          child: SizedBox(
-            width: _width * .8,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: _width * .8,
+              maxHeight: 200,
+            ),
             child: SingleChildScrollView(
               child: Column(
                 children: List.generate(
@@ -64,20 +67,16 @@ class _SmartTextFieldState extends State<SmartTextField> {
                     return ListTile(
                       title: Text(_suggestion.stringValue),
                       onTap: () {
-                        final _cursorPosition =
-                            widget.controller.selection.base.offset;
+                        final _cursorPosition = widget.controller.selection.base.offset;
 
-                        final _textBeforeCursor = widget.controller.text
-                            .substring(0, _cursorPosition);
+                        final _textBeforeCursor =
+                            widget.controller.text.substring(0, _cursorPosition);
 
-                        final _textAfterCursor =
-                            widget.controller.text.substring(_cursorPosition);
+                        final _textAfterCursor = widget.controller.text.substring(_cursorPosition);
 
-                        final _prefixIndex =
-                            _textBeforeCursor.lastIndexOf(_suggestion.prefix);
+                        final _prefixIndex = _textBeforeCursor.lastIndexOf(_suggestion.prefix);
 
-                        final _value =
-                            '${_suggestion.prefix}${_suggestion.stringValue} ';
+                        final _value = '${_suggestion.prefix}${_suggestion.stringValue} ';
 
                         final _newText =
                             '${_textBeforeCursor.substring(0, _prefixIndex)}$_value$_textAfterCursor';

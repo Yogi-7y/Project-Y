@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_textfield/smart_textfield.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(const MyApp());
 
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return SmartTextFieldOverlay(
       child: MaterialApp(
-        title: 'Material App',
+        title: 'Smart TextField',
         home: Builder(builder: (context) => const SmartTextFieldScreen()),
       ),
     );
@@ -30,49 +31,39 @@ class _SmartTextFieldScreenState extends State<SmartTextFieldScreen> {
   late final _controller = SmartTextFieldController(
     tokenizers: [
       ProjectTokenizer(values: _projects),
-      LabelTokenizer(values: _labels),
     ],
   );
 
-  // ignore: type_annotate_public_apis
-  var dateTime = DateTime.now();
-  Project? _selectedProject;
-  Label? _selectedLabel;
+  DateTime? _extractedDateTime;
+  Project? _extractedProject;
 
   @override
   void initState() {
     super.initState();
 
     _controller.addListener(() {
-      if (_controller.highlightedDateTime != null) {
-        setState(() {
-          dateTime = _controller.highlightedDateTime!;
-        });
-      }
-    });
+      _extractedDateTime = _controller.highlightedDateTime;
 
-    _controller.highlightedTokens.addListener(() {
-      final _tokens = _controller.highlightedTokens.value;
+      final _tokens = _controller.highlightedTokens;
 
-      if (_tokens['@'] != null) {
-        _selectedProject = _tokens['@']?.value as Project?;
+      final _projectToken = _tokens[ProjectTokenizer.prefixId];
+
+      if (_projectToken != null && _projectToken.value is Project?) {
+        _extractedProject = _projectToken.value as Project?;
       } else {
-        _selectedProject = null;
-      }
-
-      if (_tokens['#'] != null) {
-        _selectedLabel = _tokens['#']?.value as Label?;
-      } else {
-        _selectedLabel = null;
+        _extractedProject = null;
       }
 
       Future.delayed(
         Duration.zero,
-        () {
-          if (mounted) setState(() {});
-        },
+        () => setState(() {}),
       );
     });
+
+    Future.delayed(
+      Duration.zero,
+      () => setState(() {}),
+    );
   }
 
   @override
@@ -81,114 +72,67 @@ class _SmartTextFieldScreenState extends State<SmartTextFieldScreen> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  String getFormattedDateTime(DateTime dateTime) {
+    final formatter = DateFormat("d MMM, yyyy 'at' h:mma");
+    return formatter.format(dateTime);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Smart TextField'),
-      ),
-      body: Center(
+      appBar: AppBar(title: const Text('Smart TextField')),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SmartTextField(controller: _controller),
+            const SizedBox(height: 40),
             Text(
-              showFormattedDateTime(dateTime),
-              style: const TextStyle(fontSize: 20),
-            ),
-            Text('Project: ${_selectedProject?.name ?? 'None'}'),
-            Text('Label: ${_selectedLabel?.name ?? 'None'}')
+                'Extracted DateTime: ${_extractedDateTime != null ? getFormattedDateTime(_extractedDateTime!) : 'None'}'),
+            Text(
+                'Extracted Project: ${_extractedProject != null ? _extractedProject!.name : 'None'}')
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await showModalBottomSheet<void>(
-            context: context,
-            showDragHandle: true,
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.8,
-            ),
-            builder: (context) {
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20)
-                        .copyWith(
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-                ),
-                child: SmartTextField(
-                  controller: _controller,
-                ),
-              );
-            },
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
     );
   }
-
-  String showFormattedDateTime(DateTime dateTime) =>
-      '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute}';
-}
-
-@immutable
-class ProjectTokenizer extends Tokenizer<Project> {
-  ProjectTokenizer({
-    required super.values,
-    super.prefix = '@',
-  });
 }
 
 @immutable
 // ignore: avoid_implementing_value_types
 class Project implements Tokenable {
-  const Project({
-    required this.name,
-  });
+  const Project({required this.name});
 
   final String name;
 
   @override
-  String get stringValue => name;
+  String get prefix => ProjectTokenizer.prefixId;
 
   @override
-  String get prefix => '@';
+  String get stringValue => name;
 }
 
-final _projects = [
-  const Project(name: 'John Doe'),
-  const Project(name: 'Jane Doe'),
-  const Project(name: 'Baz qux'),
-  const Project(name: 'Foo bar'),
-  const Project(name: 'Foo baz'),
-  const Project(name: 'Foo qux'),
-  const Project(name: 'Foo foo'),
-];
-
-@immutable
-class LabelTokenizer extends Tokenizer<Label> {
-  LabelTokenizer({
+class ProjectTokenizer extends Tokenizer<Project> {
+  ProjectTokenizer({
     required super.values,
-    super.prefix = '#',
+    super.prefix = prefixId,
   });
+
+  static const prefixId = '@';
 }
 
-@immutable
-// ignore: avoid_implementing_value_types
-class Label implements Tokenable {
-  const Label({required this.name});
-
-  final String name;
-
-  @override
-  String get stringValue => name;
-
-  @override
-  String get prefix => '#';
-}
-
-final _labels = [
-  const Label(name: 'Label 1'),
-  const Label(name: 'Label 2'),
-  const Label(name: 'Label 3'),
-  const Label(name: 'Label 4'),
+const _projects = <Project>[
+  Project(name: 'Run a marathon'),
+  Project(name: 'Learn to code'),
+  Project(name: 'Write a book'),
+  Project(name: 'House renovation'),
+  Project(name: 'Travel to Japan'),
+  Project(name: 'Learn to play the guitar'),
 ];

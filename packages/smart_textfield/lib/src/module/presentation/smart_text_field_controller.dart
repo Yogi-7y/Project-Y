@@ -17,26 +17,48 @@ class SmartTextFieldController extends TextEditingController {
   /// DateTime that was identified from the text.
   DateTime? highlightedDateTime;
 
-  /// Tokens that were identified from the text based on the [tokenizers].
-  /// To read the value of a specific token, lookup via its prefix.
-  /// For example, to get the value of a token with the prefix '@', use:
+  /// Map of tokens that were extracted from the raw text.
+  /// To access the token, use the prefix of the tokenizer.
+  /// For example, if the prefix is @,
   /// ```dart
-  /// final value = highlightedTokens['@']?.value as Type?;
+  /// final projectToken = highlightedTokens['@'];
   /// ```
-  final highlightedTokens = ValueNotifier<Map<String, Token>>({});
+  final highlightedTokens = <String, Token>{};
 
   late final _useCase = SmartTextFieldUseCase(tokenizers: tokenizers);
   late final suggestions = ValueNotifier<List<Tokenable>>([]);
+
+  @override
+  void notifyListeners() {
+    setDateTime();
+    setHighlightedTokens();
+    super.notifyListeners();
+  }
 
   void setDateTime() {
     final _dateTimeToken = _tokens.firstWhereOrNull(
       (token) => token.prefix == dateTimePrefix,
     );
 
-    final _value = _dateTimeToken?.value;
+    if (_dateTimeToken == null) {
+      highlightedDateTime = null;
+      return;
+    }
+
+    final _value = _dateTimeToken.value;
 
     if (_value is TokenableDateTime) {
       highlightedDateTime = _value;
+    }
+  }
+
+  void setHighlightedTokens() {
+    highlightedTokens.clear();
+
+    for (final token in _tokens) {
+      if (token.isHighlighted) {
+        highlightedTokens[token.prefix] = token;
+      }
     }
   }
 
@@ -54,6 +76,38 @@ class SmartTextFieldController extends TextEditingController {
     }
   }
 
+  int _lastCursorPosition = 0;
+
+  @override
+  set selection(TextSelection newSelection) {
+    final _result = _useCase.tokenize(text: text);
+
+    _tokens
+      ..clear()
+      ..addAll(_result);
+
+    final _cursorPosition = newSelection.baseOffset;
+
+    final _token = _tokens.firstWhereOrNull(
+      (element) =>
+          element.isHighlighted &&
+          _cursorPosition > element.offset.start &&
+          _cursorPosition < element.offset.end,
+    );
+
+    if (_token != null) {
+      final _newPosition =
+          newSelection.baseOffset < _lastCursorPosition ? _token.offset.start : _token.offset.end;
+
+      super.selection = TextSelection.fromPosition(TextPosition(offset: _newPosition));
+      _lastCursorPosition = _newPosition;
+      return;
+    }
+
+    super.selection = newSelection;
+    _lastCursorPosition = newSelection.baseOffset;
+  }
+
   @override
   void dispose() {
     suggestions.dispose();
@@ -68,23 +122,12 @@ class SmartTextFieldController extends TextEditingController {
   }) {
     final _inlineSpans = <InlineSpan>[];
 
-    final _tokenizeResult = _useCase.tokenize(text: text);
-
-    highlightedTokens.value.clear();
-    highlightedTokens.notifyListeners();
-
-    _tokens
-      ..clear()
-      ..addAll(_tokenizeResult);
-
-    setDateTime();
-
     Future.delayed(
       Duration.zero,
       _updateSuggestions,
     );
 
-    for (final token in _tokenizeResult) {
+    for (final token in _tokens) {
       if (token.isHighlighted) {
         _inlineSpans
           ..add(
@@ -101,9 +144,6 @@ class SmartTextFieldController extends TextEditingController {
                   : token.displayValue.length,
             ),
           );
-
-        highlightedTokens.value[token.prefix] = token;
-        highlightedTokens.notifyListeners();
       } else {
         _inlineSpans.add(
           buildNormalTextSpan(
@@ -136,23 +176,23 @@ class SmartTextFieldController extends TextEditingController {
   }) =>
       WidgetSpan(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 2),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primary.withOpacity(.2),
             border: Border(
               bottom: BorderSide(
                 color: Theme.of(context).colorScheme.primary,
-                width: 2.5,
+                width: 2,
               ),
             ),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
             text,
-            style: style,
+            style: style?.copyWith(height: 1.4),
           ),
         ),
-        alignment: PlaceholderAlignment.middle,
+        // alignment: PlaceholderAlignment.middle,
         style: style,
         baseline: TextBaseline.alphabetic,
       );
