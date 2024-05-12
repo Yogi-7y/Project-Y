@@ -1,3 +1,7 @@
+## 0.0.6
+
+- Refactor example code.
+
 ## 0.0.5
 
 - Update demo asset URL in README.md
