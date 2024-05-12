@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smart_textfield/smart_textfield.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_textfield/smart_textfield.dart';
 
 void main() => runApp(const MyApp());
 
@@ -41,24 +41,21 @@ class _SmartTextFieldScreenState extends State<SmartTextFieldScreen> {
   void initState() {
     super.initState();
 
-    _controller.addListener(() {
-      _extractedDateTime = _controller.highlightedDateTime;
+    _controller.addListener(_handleTextFieldChanges);
+  }
 
-      final _tokens = _controller.highlightedTokens;
+  void _handleTextFieldChanges() {
+    _extractedDateTime = _controller.highlightedDateTime;
 
-      final _projectToken = _tokens[ProjectTokenizer.prefixId];
+    final _tokens = _controller.highlightedTokens;
 
-      if (_projectToken != null && _projectToken.value is Project?) {
-        _extractedProject = _projectToken.value as Project?;
-      } else {
-        _extractedProject = null;
-      }
+    final _projectToken = _tokens[ProjectTokenizer.prefixId];
 
-      Future.delayed(
-        Duration.zero,
-        () => setState(() {}),
-      );
-    });
+    if (_projectToken != null && _projectToken.value is Project?) {
+      _extractedProject = _projectToken.value as Project?;
+    } else {
+      _extractedProject = null;
+    }
 
     Future.delayed(
       Duration.zero,
