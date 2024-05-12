@@ -1,26 +1,29 @@
-# SmartTextField - Capture information seamlessly with natural language input
+## SmartTextField - Capture information seamlessly with natural language input 🗣️
 
-SmartTextField is a TextInput that aims to extract valuable information seamlessly from raw text making it easier to collect various types of data without breaking the user flow.
+SmartTextField is a TextInput that aims to extract valuable information seamlessly from raw text, making it easier to collect various types of data without breaking the user flow. 🚀
 
-## Introduction
+![SmartTextField Demo](https://firebasestorage.googleapis.com/v0/b/yogi-s-app.appspot.com/o/smart_textfield%2FCleanShot%202024-05-12%20at%2015.35.57.gif?alt=media&token=42c8c3c0-fc41-4e6f-8cd5-b4e7cd06292b)
 
-In traditional user interfaces, users often need to navigate through multiple input fields to provide different types of information, which can disrupt the flow and lead to a suboptimal user experience. SmartTextField addresses this issue by allowing users to enter all the required information in a single text field, using a natural language format.
+## 🌟 Introduction
 
-## Use Case
+In traditional user interfaces, users often need to navigate through multiple input fields to provide different types of information, which can disrupt the flow and lead to a suboptimal user experience. 😩 SmartTextField addresses this issue by allowing users to enter all the required information in a single text field, using a natural language format. 🤯
 
-For instance, in a task management app, if a user wants to provide the due date, project, and priority for a task, they can simply type all the information in the text field as a normal, readable text in one flow. Instead of having separate input fields for each piece of information, the user can enter something like: _"Buy groceries tomorrow @personal #p2"_
+## 💡 Use Case
+
+For instance, in a task management app, if a user wants to provide the due date, project, and priority for a task, they can simply type all the information in the text field as a normal, readable text in one flow. Instead of having separate input fields for each piece of information, the user can enter something like: _"Buy groceries tomorrow @personal #p2"_ 🛒
+
 SmartTextField will then parse and extract the relevant information from the user's input text:
 
-- Due date: `tomorrow`
-- Project: `personal`
-- Priority: `p2`
+- Due date: `tomorrow` 📆
+- Project: `personal` 💼
+- Priority: `p2` ⚠️
 
-## Implementation
+## 🛠️ Implementation
 
 SmartTextField achieves this functionality by taking a set of patterns and possible values from the client. The client implements a `Tokenizer` component, which has the following properties:
 
-1. **pattern**: A regular expression used to match patterns in the user's input text and invoke a list of possible values.
-2. **values**: A list of values that will be shown to the user if a pattern is matched. Fuzzy matching can be used to find the closest value to the user's input. Value can be any type and must implement `Tokenable`.
+1. **pattern**: A regular expression used to match patterns in the user's input text and invoke a list of possible values. 🔍
+2. **values**: A list of values that will be shown to the user if a pattern is matched. Fuzzy matching can be used to find the closest value to the user's input. Value can be any type and must implement `Tokenable`. 🔢
 
 ```dart
 @immutable
@@ -56,7 +59,7 @@ const _projects = <Project>[
 
 ```
 
-The client can define multiple `Tokenizer` instances, each with its own pattern & values, to handle different types of information (e.g., dates, projects, priorities, etc.) and pass it to the `SmartTextFieldController`.
+The client can define multiple `Tokenizer` instances, each with its own pattern & values, to handle different types of information (e.g., dates, projects, priorities, etc.) and pass it to the `SmartTextFieldController`. 🎛️
 
 ```dart
 final _controller = SmartTextFieldController(
@@ -74,9 +77,9 @@ return SmartTextField(
 
 ```
 
-### Reading Extracted Values
+### 📖 Reading Extracted Values
 
-`highlightedTokens` stores a list of extracted values from the raw text. To listen for latest changes, attach a listener on `initState`.
+`highlightedTokens` stores a list of extracted values from the raw text. To listen for latest changes, attach a listener on `initState`. 👂
 
 ```dart
 @override
@@ -86,16 +89,18 @@ void initState() {
 }
 
 void _onHighlightedTokensChanged() {
-  final _extractedTime = _controller.highlightedDateTime; /// Returns the extracted DateTime from the raw text.
+  final _extractedTime = _controller.highlightedDateTime; /// Returns the extracted DateTime from the raw text. 🕰️
 
-  final highlightedTokens = _controller.highlightedTokens.value; /// Map of extracted tokens that can be looked up by their prefix.
+  final highlightedTokens = _controller.highlightedTokens.value; /// Map of extracted tokens that can be looked up by their prefix. 🗝️
 
   final _project = highlightedTokens[ProjectTokenizer.prefixId];
 }
 ```
 
-## Benefits
+## 🚀 Benefits
 
-- **Streamlined User Experience**: Users can enter all the required information in a single, continuous flow, without the need to navigate between multiple input fields.
-- **Natural Language Input**: Users can express information using natural language, making the input process more intuitive and user-friendly.
-- **Customizable Patterns and Values**: Clients can define their own patterns and possible values based on their specific requirements, making SmartTextField highly flexible and adaptable.
+- **Streamlined User Experience**: Users can enter all the required information in a single, continuous flow, without the need to navigate between multiple input fields. 🏃‍♀️
+- **Natural Language Input**: Users can express information using natural language, making the input process more intuitive and user-friendly. 🗣️
+- **Customizable Patterns and Values**: Clients can define their own patterns and possible values based on their specific requirements, making SmartTextField highly flexible and adaptable. 🔧
+
+Ready to take your app's user experience to the next level? Give SmartTextField a try! 🎉

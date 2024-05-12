@@ -1,6 +1,6 @@
 name: smart_textfield
 description: "TextField that can extract relevant information from the raw text input."
-version: 0.0.3
+version: 0.0.4
 repository: https://github.com/Yogi-7y/Project-Y/tree/main/packages/smart_textfield
 
 environment:
@@ -18,6 +18,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   lints_y:
-    path: ../lints_y
+    git:
+      url: https://github.com/Yogi-7y/Project-Y.git
+      path: packages/lints_y
+      ref: main
 
 flutter:

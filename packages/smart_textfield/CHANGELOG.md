@@ -1,3 +1,8 @@
+## 0.0.4
+
+- Update README.md and attach video demo.
+- Get `lints_y` from git dependencies.
+
 ## 0.0.3
 
 - Simplified Example
