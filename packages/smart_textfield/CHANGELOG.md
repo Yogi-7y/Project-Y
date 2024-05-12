@@ -1,3 +1,7 @@
+## 0.0.5
+
+- Update demo asset URL in README.md
+
 ## 0.0.4
 
 - Update README.md and attach video demo.

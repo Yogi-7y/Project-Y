@@ -2,7 +2,7 @@
 
 SmartTextField is a TextInput that aims to extract valuable information seamlessly from raw text, making it easier to collect various types of data without breaking the user flow. 🚀
 
-![SmartTextField Demo](https://firebasestorage.googleapis.com/v0/b/yogi-s-app.appspot.com/o/smart_textfield%2FCleanShot%202024-05-12%20at%2015.35.57.gif?alt=media&token=42c8c3c0-fc41-4e6f-8cd5-b4e7cd06292b)
+![SmartTextField Demo](https://raw.githubusercontent.com/Yogi-7y/Project-Y/main/assets/smart_textfield/smart_textfield_demo.gif)
 
 ## 🌟 Introduction
 
