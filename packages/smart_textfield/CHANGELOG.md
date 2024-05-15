@@ -1,3 +1,7 @@
+## 0.0.7
+
+- Fix range issue by sorting tokenizers before highlighting.
+
 ## 0.0.6
 
 - Refactor example code.

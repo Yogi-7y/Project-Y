@@ -1,6 +1,6 @@
 name: smart_textfield
 description: "TextField that can extract relevant information from the raw text input."
-version: 0.0.6
+version: 0.0.7
 repository: https://github.com/Yogi-7y/Project-Y/tree/main/packages/smart_textfield
 
 environment:
