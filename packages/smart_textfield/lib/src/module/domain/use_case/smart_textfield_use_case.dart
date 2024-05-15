@@ -39,8 +39,7 @@ class SmartTextFieldUseCase {
         Token<TokenableDateTime>(
           prefix: dateTimePrefix,
           rawValue: text.substring(_dateTimeToken.start, _dateTimeToken.end),
-          displayValue:
-              text.substring(_dateTimeToken.start, _dateTimeToken.end),
+          displayValue: text.substring(_dateTimeToken.start, _dateTimeToken.end),
           value: _tokenableDateTimeValue,
           isHighlighted: true,
           offset: TokenOffset(
@@ -55,6 +54,8 @@ class SmartTextFieldUseCase {
       final _tokensFromTokenizer = tokenizer.tokenize(text);
       _tokenizerTokens.addAll(_tokensFromTokenizer);
     }
+
+    _tokenizerTokens.sort((a, b) => a.offset.start.compareTo(b.offset.start));
 
     if (_tokenizerTokens.isEmpty)
       return [
@@ -126,8 +127,7 @@ class SmartTextFieldUseCase {
 
       if (_date == null || _time == null) return null;
 
-      final _dateTime = DateTime(
-          _date.year, _date.month, _date.day, _time.hour, _time.minute);
+      final _dateTime = DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
 
       final _interval = (
         start: _dateInterval!.start,

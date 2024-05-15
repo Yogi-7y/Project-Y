@@ -125,8 +125,7 @@ void main() {
       test(
         'returns the value if the pattern is matched',
         () async {
-          final _result =
-              _systemUnderTest.tokenize(text: 'foo bar baz qux @John Doe');
+          final _result = _systemUnderTest.tokenize(text: 'foo bar baz qux @John Doe');
 
           final _expectedResult = [
             Token<TokenableString>(
@@ -213,6 +212,62 @@ void main() {
                 start: 40,
                 end: 52,
               ),
+            ),
+          ];
+
+          final _result = _systemUnderTest.tokenize(text: _input);
+
+          expect(_result, _expectedResult);
+        },
+      );
+
+      test(
+        'handles multiple values where date is at the end',
+        () {
+          const _input = 'Meet @John Doe for Foo bar on 20th March 2018 at 1pm';
+
+          final _expectedResult = [
+            Token<TokenableString>(
+              prefix: '',
+              rawValue: 'Meet ',
+              displayValue: 'Meet ',
+              value: const TokenableString('Meet '),
+              offset: const TokenOffset(
+                start: 0,
+                end: 5,
+              ),
+            ),
+            Token<Project>(
+              prefix: '@',
+              rawValue: '@John Doe',
+              displayValue: 'John Doe',
+              value: const Project(name: 'John Doe'),
+              isHighlighted: true,
+              offset: const TokenOffset(
+                start: 5,
+                end: 14,
+              ),
+            ),
+            Token<TokenableString>(
+              prefix: '',
+              rawValue: ' for Foo bar on ',
+              displayValue: ' for Foo bar on ',
+              value: const TokenableString(' for Foo bar on '),
+              offset: const TokenOffset(
+                start: 14,
+                end: 30,
+              ),
+            ),
+            Token<TokenableDateTime>(
+              prefix: dateTimePrefix,
+              rawValue: '20th March 2018 at 1pm',
+              displayValue: '20th March 2018 at 1pm',
+              isHighlighted: true,
+              offset: const TokenOffset(
+                start: 30,
+                end: 52,
+              ),
+              value: TokenableDateTime(2018, 3, 20, 13),
             ),
           ];
 
