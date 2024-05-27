@@ -107,8 +107,6 @@ class SmartTextFieldOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Portal(
-      child: child,
-    );
+    return Portal(child: child);
   }
 }

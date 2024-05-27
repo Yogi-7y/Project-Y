@@ -85,6 +85,34 @@ void main() {
     },
   );
 
+  test('date followed by time', () {
+    const _input = 'Do foo on 31st December 2022 at 10pm';
+
+    final _expectedResult = ParserValue(
+      value: DateTime(2022, 12, 31, 22),
+      start: 10,
+      end: 36,
+    );
+
+    final _result = _systemUnderTest.processDateTime(_input);
+
+    expect(_result, _expectedResult);
+  });
+
+  test('time followed by date', () {
+    const _input = 'Do foo at 10pm on 31st December 2022';
+
+    final _expectedResult = ParserValue(
+      value: DateTime(2022, 12, 31, 22),
+      start: 10,
+      end: 36,
+    );
+
+    final _result = _systemUnderTest.processDateTime(_input);
+
+    expect(_result, _expectedResult);
+  });
+
   group(
     'tokenize',
     () {

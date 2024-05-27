@@ -129,9 +129,15 @@ class SmartTextFieldUseCase {
 
       final _dateTime = DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
 
+      final _intervalStart =
+          _dateInterval!.start < _timeInterval!.start ? _dateInterval.start : _timeInterval.start;
+
+      final _intervalEnd =
+          _dateInterval.end > _timeInterval.end ? _dateInterval.end : _timeInterval.end;
+
       final _interval = (
-        start: _dateInterval!.start,
-        end: _timeInterval!.end,
+        start: _intervalStart,
+        end: _intervalEnd,
       );
 
       return ParserValue<DateTime>(
