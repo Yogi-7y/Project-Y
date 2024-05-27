@@ -81,6 +81,18 @@ void main() {
           expect(_result, _expectedResult);
         },
       );
+
+      test(
+        'should perform fuzzy search and return matching suggestions',
+        () {
+          final _result = projectTokenizer.suggestions('foo bar baz qux @doe');
+          const _expectedResult = [
+            Project(name: 'John Doe'),
+            Project(name: 'Jane Doe'),
+          ];
+          expect(_result, _expectedResult);
+        },
+      );
     },
   );
 }

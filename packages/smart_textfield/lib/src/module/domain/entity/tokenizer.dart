@@ -40,12 +40,14 @@ abstract class Tokenizer<T extends Tokenable> {
 
     if (_prefixMatch != null) {
       final _query = _caseInsensitiveInput.substring(_prefixMatch.start);
+      final _queryWithoutPrefix = _query.substring(prefix.length);
 
-      final _suggestions = valuesWithPrefix
-          .where(
-            (value) => value.prefixValue.toLowerCase().startsWith(_query),
-          )
-          .toList();
+      final _suggestions = valuesWithPrefix.where(
+        (value) {
+          final _valueWithoutPrefix = value.prefixValue.substring(prefix.length).toLowerCase();
+          return _valueWithoutPrefix.contains(_queryWithoutPrefix);
+        },
+      ).toList();
 
       return _suggestions.map((e) => e.value).toList();
     }
