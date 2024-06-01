@@ -113,6 +113,83 @@ void main() {
     expect(_result, _expectedResult);
   });
 
+  test(
+    'when only time is passed in, take date as today',
+    () {
+      const _input = 'Do foo at 10pm';
+
+      final _today = DateTime.now();
+
+      final _expectedResult = ParserValue(
+        value: DateTime(_today.year, _today.month, _today.day, 22),
+        start: 10,
+        end: 14,
+      );
+
+      final _result = _systemUnderTest.processDateTime(_input);
+
+      expect(_result, _expectedResult);
+    },
+  );
+
+  test(
+    'when date and time have too much noise between them, take the one at the end of the sentence',
+    () {
+      const _input = 'Lets meet tomorrow. We can do foo. Does 10pm work for you?';
+
+      final _today = DateTime.now();
+
+      final _expectedResult = ParserValue(
+        value: DateTime(_today.year, _today.month, _today.day, 22),
+        start: 40,
+        end: 44,
+      );
+
+      final _result = _systemUnderTest.processDateTime(_input);
+
+      expect(_result, _expectedResult);
+    },
+  );
+
+  group(
+    'isWithinRange',
+    () {
+      test(
+        'returns true when the value is within the range',
+        () {
+          // Text: 'Do foo on 20th March 2018 at 1pm';
+
+          const _dateOffset = (start: 10, end: 25);
+          const _timeOffset = (start: 29, end: 32);
+
+          final _result = _systemUnderTest.isWithinRange(
+            dateOffset: _dateOffset,
+            timeOffset: _timeOffset,
+          );
+
+          expect(_result, isTrue);
+        },
+      );
+
+      test(
+        'return false when value is not within the range',
+        () {
+          // Text: Let's meet today? Does place X around 10pm work for you?
+
+          const _dateOffset = (start: 11, end: 17);
+          const _timeOffset = (start: 38, end: 42);
+
+          final _result = _systemUnderTest.isWithinRange(
+            dateOffset: _dateOffset,
+            timeOffset: _timeOffset,
+          );
+
+          expect(_result, isFalse);
+        },
+      );
+    },
+  );
+
   group(
     'tokenize',
     () {
