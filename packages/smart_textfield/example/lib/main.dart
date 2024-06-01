@@ -89,7 +89,18 @@ class _SmartTextFieldScreenState extends State<SmartTextFieldScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SmartTextField(controller: _controller),
+            SmartTextField(
+              controller: _controller,
+              autofocus: true,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              suggestionItemBuilder: (context, suggestion) => ListTile(
+                title: Text(suggestion),
+              ),
+            ),
             const SizedBox(height: 40),
             Text(
                 'Extracted DateTime: ${_extractedDateTime != null ? getFormattedDateTime(_extractedDateTime!) : 'None'}'),
