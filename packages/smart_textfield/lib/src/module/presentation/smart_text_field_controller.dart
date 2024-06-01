@@ -30,6 +30,12 @@ class SmartTextFieldController extends TextEditingController {
 
   @override
   void notifyListeners() {
+    final _result = _useCase.tokenize(text: text);
+
+    _tokens
+      ..clear()
+      ..addAll(_result);
+
     setDateTime();
     setHighlightedTokens();
     super.notifyListeners();
@@ -80,12 +86,6 @@ class SmartTextFieldController extends TextEditingController {
 
   @override
   set selection(TextSelection newSelection) {
-    final _result = _useCase.tokenize(text: text);
-
-    _tokens
-      ..clear()
-      ..addAll(_result);
-
     final _cursorPosition = newSelection.baseOffset;
 
     final _token = _tokens.firstWhereOrNull(
