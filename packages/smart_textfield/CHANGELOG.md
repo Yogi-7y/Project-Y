@@ -1,3 +1,8 @@
+## 1.0.0
+
+- Add `suggestionBuilder` property to customize suggestion list UI.
+- Add priority to handle date and time.
+
 ## 0.0.7
 
 - Fix range issue by sorting tokenizers before highlighting.
