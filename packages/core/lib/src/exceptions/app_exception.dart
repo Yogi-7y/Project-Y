@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 class AppException implements Exception {
   const AppException({
     required this.consoleMessage,
+    this.code = AppExceptionCode.defaultCode,
     this.message = 'Something went wrong. Please try again later.',
   });
+
+  final AppExceptionCode code;
 
   /// User-friendly message
   final String message;
@@ -16,5 +19,20 @@ class AppException implements Exception {
 }
 
 class SerializationException extends AppException {
-  const SerializationException({required super.consoleMessage, super.message});
+  const SerializationException({
+    required super.consoleMessage,
+    super.message,
+    super.code,
+  });
+}
+
+enum AppExceptionCode {
+  defaultCode(code: 'default_code'),
+
+  /// Used during serialization when a key is expected but not found
+  missingKey(code: 'missing_key');
+
+  const AppExceptionCode({required this.code});
+
+  final String code;
 }
