@@ -15,4 +15,17 @@ class ProjectEntity {
   final String id;
 
   final String name;
+
+  @override
+  String toString() => 'ProjectEntity(id: $id, name: $name)';
+
+  @override
+  bool operator ==(covariant ProjectEntity other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id && other.name == name;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode;
 }
