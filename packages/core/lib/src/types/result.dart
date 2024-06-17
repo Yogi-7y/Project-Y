@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'dart:developer' as developer;
+
+import '../../core.dart';
 
 typedef AsyncResult<S> = Future<Result<S>>;
 
@@ -25,7 +28,25 @@ abstract class Result<S> {
 
   Result<T> map<T>(T Function(S value) f) {
     if (this is Success<S>) {
-      return Success(f((this as Success<S>).value as S));
+      try {
+        final _value = f((this as Success<S>).value as S);
+
+        return Success(_value);
+      } on AppException catch (e, s) {
+        developer.log('Error while transforming', error: e, stackTrace: s);
+        return Failure(
+          message: e.message,
+          error: e,
+          stackTrace: s,
+        );
+      } catch (e, s) {
+        developer.log('Error while transforming', error: e, stackTrace: s);
+        return Failure(
+          message: e.toString(),
+          error: e,
+          stackTrace: StackTrace.current,
+        );
+      }
     }
 
     if (this is Failure<S>) {

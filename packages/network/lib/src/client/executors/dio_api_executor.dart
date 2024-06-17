@@ -17,7 +17,12 @@ class DioApiExecutor implements ApiExecutor {
   @override
   AsyncResult<T> get<T>(Request request) async {
     try {
-      final _response = await dio.get<T>(request.url);
+      final _response = await dio.get<T>(
+        request.url,
+        options: Options(
+          headers: request.headers,
+        ),
+      );
       return Success(_response.data as T);
     } catch (exception, stackTrace) {
       return _catch(request, exception, stackTrace);
@@ -27,7 +32,10 @@ class DioApiExecutor implements ApiExecutor {
   @override
   AsyncResult<T> post<T>(Request request) async {
     try {
-      final _response = await dio.get<T>(request.url);
+      final _response = await dio.post<T>(request.url,
+          options: Options(
+            headers: request.headers,
+          ));
       return Success(_response.data as T);
     } catch (exception, stackTrace) {
       return _catch(request, exception, stackTrace);

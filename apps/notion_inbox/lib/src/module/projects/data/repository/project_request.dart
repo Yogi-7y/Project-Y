@@ -1,8 +1,19 @@
 import 'package:network/network.dart';
 
-class ProjectRequest extends GetRequest {
+import '../../../../core/env/env.dart';
+
+class ProjectRequest extends PostRequest {
+  static const _projectId = Env.projectDatabaseId;
+
+  // ignore: sort_constructors_first
   const ProjectRequest({
     super.host = 'api.notion.com',
-    super.endpoint = '/v1/databases/12345678-1234-1234-1234-1234567890ab/query',
+    super.endpoint = '/v1/databases/$_projectId/query',
   });
+
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${Env.notionSecret}',
+        'Notion-Version': Env.notionVersion,
+      };
 }
