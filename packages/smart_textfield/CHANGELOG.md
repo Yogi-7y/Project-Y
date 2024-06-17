@@ -1,3 +1,8 @@
+## 1.0.3
+
+- Update README.md to include `SmartTextFieldOverlay` widget.
+- Handle fallback for `suggestionBuilder` property.
+
 ## 1.0.2
 
 - Add methods to let client update the `tokenizers`

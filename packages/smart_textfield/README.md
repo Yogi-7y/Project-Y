@@ -77,6 +77,17 @@ return SmartTextField(
 
 ```
 
+Ensure that the root of your app is wrapped with `SmartTextFieldOverlay` to display the overlay of suggestions.
+
+```dart
+return SmartTextFieldOverlay(
+  child: MaterialApp(
+    title: 'Smart TextField',
+      home: Builder(builder: (context) => const SmartTextFieldScreen()),
+    ),
+  );
+```
+
 ### 📖 Reading Extracted Values
 
 `highlightedTokens` stores a list of extracted values from the raw text. To listen for latest changes, attach a listener on `initState`. 👂

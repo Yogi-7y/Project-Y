@@ -267,10 +267,14 @@ class _SmartTextFieldState extends State<SmartTextField> {
 
                         widget.controller.text = _newText;
                       },
-                      child: widget.suggestionItemBuilder!(
-                        context,
-                        _suggestion.stringValue,
-                      ),
+                      child: widget.suggestionItemBuilder == null
+                          ? ListTile(
+                              title: Text(_suggestion.stringValue),
+                            )
+                          : widget.suggestionItemBuilder!(
+                              context,
+                              _suggestion.stringValue,
+                            ),
                     );
                   },
                 ),
