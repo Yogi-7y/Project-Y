@@ -97,17 +97,4 @@ abstract class Tokenable {
   final String stringValue;
 
   final String prefix;
-
-  @override
-  String toString() => 'Tokenable(stringValue: $stringValue)';
-
-  @override
-  bool operator ==(covariant Tokenable other) {
-    if (identical(this, other)) return true;
-
-    return other.stringValue == stringValue;
-  }
-
-  @override
-  int get hashCode => stringValue.hashCode;
 }

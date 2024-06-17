@@ -1,3 +1,7 @@
+## 1.0.1
+
+- Remove value type from `Tokenable` to follow `avoid_implementing_value_types` lint rule.
+
 ## 1.0.0
 
 - Add `suggestionBuilder` property to customize suggestion list UI.
