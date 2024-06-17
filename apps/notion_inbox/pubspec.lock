@@ -459,11 +459,11 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/smart_textfield"
-      ref: "smart_textfield_v1.0.0"
-      resolved-ref: cf6d3c4f310242c282f06192b89da2a9cae66e07
+      ref: "smart_textfield_v1.0.1"
+      resolved-ref: "929f0f5497c006c995d114eed0d58e6616de098a"
       url: "https://github.com/Yogi-7y/Project-Y.git"
     source: git
-    version: "1.0.0"
+    version: "1.0.1"
   source_gen:
     dependency: transitive
     description:
