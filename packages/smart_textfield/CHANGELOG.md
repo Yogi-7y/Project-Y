@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Add methods to let client update the `tokenizers`
+
 ## 1.0.1
 
 - Remove value type from `Tokenable` to follow `avoid_implementing_value_types` lint rule.

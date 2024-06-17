@@ -7,10 +7,28 @@ import '../domain/use_case/smart_textfield_use_case.dart';
 
 class SmartTextFieldController extends TextEditingController {
   SmartTextFieldController({
-    required this.tokenizers,
-  });
+    List<Tokenizer<Tokenable>> tokenizers = const [],
+  }) : _tokenizers = tokenizers;
 
-  final List<Tokenizer> tokenizers;
+  final List<Tokenizer> _tokenizers;
+
+  @visibleForTesting
+  List<Tokenizer> get tokenizers => _tokenizers;
+
+  void clearAll() {
+    _tokenizers.clear();
+    notifyListeners();
+  }
+
+  void addTokenizer(Tokenizer tokenizer) {
+    _tokenizers.add(tokenizer);
+    notifyListeners();
+  }
+
+  void addAllTokenizers(List<Tokenizer> tokenizers) {
+    _tokenizers.addAll(tokenizers);
+    notifyListeners();
+  }
 
   final _tokens = <Token>[];
 
@@ -25,7 +43,7 @@ class SmartTextFieldController extends TextEditingController {
   /// ```
   final highlightedTokens = <String, Token>{};
 
-  late final _useCase = SmartTextFieldUseCase(tokenizers: tokenizers);
+  late final _useCase = SmartTextFieldUseCase(tokenizers: _tokenizers);
   late final suggestions = ValueNotifier<List<Tokenable>>([]);
 
   @override
@@ -71,7 +89,7 @@ class SmartTextFieldController extends TextEditingController {
   void _updateSuggestions() {
     suggestions.value = [];
 
-    for (final tokenizer in tokenizers) {
+    for (final tokenizer in _tokenizers) {
       final _suggestions = tokenizer.suggestions(text);
 
       if (_suggestions.isNotEmpty) {
