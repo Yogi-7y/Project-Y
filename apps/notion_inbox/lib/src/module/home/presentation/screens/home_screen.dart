@@ -29,6 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TaskModals {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 12),
             Text(
               'Inbox',
               style: TextStyle(

@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smart_textfield/smart_textfield.dart';
 
-import '../../../projects/presentation/models/project_token.dart';
+import '../../../projects/domain/entity/project_tokenizer.dart';
 import '../../../projects/presentation/state/projects.dart';
 
 mixin TaskModals {
@@ -11,6 +13,11 @@ mixin TaskModals {
   }) {
     return showModalBottomSheet<void>(
       context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(8),
+        ),
+      ),
       builder: (context) => const AddTaskWidget(),
     );
   }
@@ -26,11 +33,23 @@ class AddTaskWidget extends ConsumerStatefulWidget {
 }
 
 class _AddTaskWidgetState extends ConsumerState<AddTaskWidget> {
-  late final SmartTextFieldController _smartTextFieldController;
+  late final _smartTextFieldController = SmartTextFieldController(tokenizers: []);
 
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      unawaited(_fetchProjects());
+    });
+  }
+
+  Future<void> _fetchProjects() async {
+    final _projects = await ref.read(projectsProvider.future);
+
+    final _tokenizer = ProjectTokenizer(values: _projects);
+
+    _smartTextFieldController.addTokenizer(_tokenizer);
   }
 
   @override
@@ -42,10 +61,31 @@ class _AddTaskWidgetState extends ConsumerState<AddTaskWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20) +
+          EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          SmartTextField(controller: _smartTextFieldController),
+          SmartTextField(
+            controller: _smartTextFieldController,
+            decoration: InputDecoration(
+              hintText: "What's the task?",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            suggestionItemBuilder: (context, suggestion) => ListTile(
+              title: Text(suggestion),
+            ),
+          ),
         ],
       ),
     );

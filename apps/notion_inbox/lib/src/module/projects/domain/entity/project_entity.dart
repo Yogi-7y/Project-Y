@@ -3,7 +3,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_textfield/smart_textfield.dart';
 
-import '../../presentation/models/project_token.dart';
+import 'project_tokenizer.dart';
 
 typedef Projects = List<ProjectEntity>;
 typedef AsyncProjects = Future<Result<Projects>>;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_textfield/smart_textfield.dart';
 
 import 'module/splash_screen/presentation/splash_screen.dart';
 
@@ -12,9 +13,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Notion Inbox',
-      home: SplashScreen(),
+    return const SmartTextFieldOverlay(
+      child: MaterialApp(
+        title: 'Notion Inbox',
+        home: SplashScreen(),
+      ),
     );
   }
 }
