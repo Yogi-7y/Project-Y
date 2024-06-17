@@ -60,32 +60,71 @@ class _AddTaskWidgetState extends ConsumerState<AddTaskWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final _border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: BorderSide(
+        color: Theme.of(context).colorScheme.onSurface.withOpacity(.5),
+      ),
+    );
+
     return Padding(
       padding: const EdgeInsets.all(20) +
           EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           SmartTextField(
             controller: _smartTextFieldController,
             decoration: InputDecoration(
               hintText: "What's the task?",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+              border: _border,
+              enabledBorder: _border,
+              focusedBorder: _border,
             ),
             suggestionItemBuilder: (context, suggestion) => ListTile(
-              title: Text(suggestion),
+              dense: true,
+              title: Text(
+                suggestion,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
             ),
           ),
+          const SizedBox(height: 16),
+          Wrap(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.primary.withOpacity(.7),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.watch_later_rounded,
+                      size: 14,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Tomorrow',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          )
         ],
       ),
     );
