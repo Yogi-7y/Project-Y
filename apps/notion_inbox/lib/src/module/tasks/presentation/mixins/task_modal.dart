@@ -10,6 +10,7 @@ import '../../../projects/domain/entity/project_entity.dart';
 import '../../../projects/domain/entity/project_tokenizer.dart';
 import '../../../projects/presentation/state/projects.dart';
 import '../../domain/entity/task_entity.dart';
+import '../../domain/use_case/task_use_case.dart';
 import '../state/task_form_provider.dart';
 
 mixin TaskModals {
@@ -18,6 +19,7 @@ mixin TaskModals {
   }) {
     return showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(8),
@@ -110,10 +112,43 @@ class _AddTaskWidgetState extends ConsumerState<AddTaskWidget> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
           Wrap(
+            runSpacing: 8,
+            spacing: 8,
             children: ref.watch(extractedTokenChipsProvider),
-          )
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              onPressed: () async {
+                final _dueDate = ref.read(dueDateTaskFormProvider);
+                final _project = ref.read(projectTaskFormProvider);
+                final _context = ref.read(contextTaskFormProvider);
+
+                final task = TaskEntity(
+                  name: _smartTextFieldController.text,
+                  dueDate: _dueDate,
+                  project: _project,
+                  context: _context,
+                );
+
+                await ref.read(taskUseCaseProvider).addTask(task: task);
+              },
+              child: Text(
+                'Create',
+                style: Theme.of(context).textTheme.button?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -135,6 +170,7 @@ class TokenValueChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(top: 12),
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -146,11 +182,6 @@ class TokenValueChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Icon(
-          //   Icons.watch_later_rounded,
-          //   size: 14,
-          //   color: Theme.of(context).colorScheme.primary,
-          // ),
           Text(
             prefix,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(

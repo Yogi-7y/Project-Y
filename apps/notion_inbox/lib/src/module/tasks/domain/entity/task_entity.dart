@@ -8,16 +8,16 @@ import '../../../projects/domain/entity/project_entity.dart';
 class TaskEntity {
   const TaskEntity({
     required this.name,
-    required this.project,
-    required this.context,
+    this.project,
+    this.context,
     this.id,
     this.dueDate,
   });
 
   final String? id;
   final String name;
-  final ProjectEntity project;
-  final ContextEntity context;
+  final ProjectEntity? project;
+  final ContextEntity? context;
   final DateTime? dueDate;
 
   TaskEntity copyWith({
