@@ -7,33 +7,38 @@ import '../../../projects/domain/entity/project_entity.dart';
 @immutable
 class TaskEntity {
   const TaskEntity({
-    required this.id,
     required this.name,
     required this.project,
     required this.context,
+    this.id,
+    this.dueDate,
   });
 
-  final String id;
+  final String? id;
   final String name;
   final ProjectEntity project;
   final ContextEntity context;
+  final DateTime? dueDate;
 
   TaskEntity copyWith({
     String? id,
     String? name,
     ProjectEntity? project,
     ContextEntity? context,
-  }) =>
-      TaskEntity(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        project: project ?? this.project,
-        context: context ?? this.context,
-      );
+    DateTime? dueDate,
+  }) {
+    return TaskEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      project: project ?? this.project,
+      context: context ?? this.context,
+      dueDate: dueDate ?? this.dueDate,
+    );
+  }
 
   @override
   String toString() {
-    return 'TaskEntity(id: $id, name: $name, project: $project, context: $context)';
+    return 'TaskEntity(id: $id, name: $name, project: $project, context: $context, dueDate: $dueDate)';
   }
 
   @override
@@ -43,11 +48,12 @@ class TaskEntity {
     return other.id == id &&
         other.name == name &&
         other.project == project &&
-        other.context == context;
+        other.context == context &&
+        other.dueDate == dueDate;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ project.hashCode ^ context.hashCode;
+    return id.hashCode ^ name.hashCode ^ project.hashCode ^ context.hashCode ^ dueDate.hashCode;
   }
 }
