@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:network/network.dart';
 
 import '../../../../core/env/env.dart';
@@ -26,5 +27,27 @@ class CreateTaskRequest extends PostRequest {
   Map<String, Object?> get body => {
         ...super.body,
         ...task.toMap(databaseId),
+      };
+}
+
+@immutable
+class GetInboxTasksRequest extends PostRequest {
+  const GetInboxTasksRequest({
+    super.host = 'api.notion.com',
+    super.endpoint = '/v1/databases/${Env.taskDatabaseId}/query',
+  });
+
+  @override
+  Map<String, Object?> get body => {
+        'filter': {
+          'property': 'Inbox',
+          'checkbox': {'equals': true},
+        }
+      };
+
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${Env.notionSecret}',
+        'Notion-Version': Env.notionVersion,
       };
 }

@@ -26,4 +26,23 @@ class NotionTaskRepository implements TaskRepository {
 
     return _response;
   }
+
+  @override
+  Future<Result<List<TaskEntity>>> inboxTasks() async {
+    const _request = GetInboxTasksRequest();
+
+    final _response = await apiClient<Map<String, Object?>>(_request);
+
+    return _response.map(
+      (data) {
+        final _results = List.castFrom<dynamic, Map<String, Object?>>(
+          data['results'] as List<dynamic>? ?? [],
+        );
+
+        final _tasks = _results.map(NotionTaskEntity.fromMap).toList();
+
+        return _tasks;
+      },
+    );
+  }
 }

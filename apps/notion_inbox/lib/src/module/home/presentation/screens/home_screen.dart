@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../projects/presentation/state/projects.dart';
 import '../../../tasks/presentation/mixins/task_modal.dart';
+import '../../../tasks/presentation/widgets/tasks_section.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -37,7 +38,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TaskModals {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 12)
+            Expanded(child: TaskSection()),
           ],
         ),
       ),

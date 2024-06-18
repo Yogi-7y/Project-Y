@@ -11,6 +11,10 @@ class TaskUseCase {
   Future<Result<void>> addTask({required TaskEntity task}) async {
     return repository.addTask(task: task);
   }
+
+  Future<Result<List<TaskEntity>>> inboxTasks() async {
+    return repository.inboxTasks();
+  }
 }
 
 final taskUseCaseProvider = Provider<TaskUseCase>((ref) {

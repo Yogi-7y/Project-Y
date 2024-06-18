@@ -7,6 +7,8 @@ import '../entity/task_entity.dart';
 
 abstract class TaskRepository {
   Future<Result<void>> addTask({required TaskEntity task});
+
+  Future<Result<List<TaskEntity>>> inboxTasks();
 }
 
 final taskRepositoryProvider = Provider<TaskRepository>(
