@@ -4,8 +4,8 @@ import 'context_entity.dart';
 
 class ContextTokenizer extends Tokenizer<ContextEntity> {
   ContextTokenizer({
-    required super.prefix,
     required super.values,
+    super.prefix = prefixId,
   });
 
   static const prefixId = '#';

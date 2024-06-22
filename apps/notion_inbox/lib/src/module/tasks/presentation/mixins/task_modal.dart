@@ -7,6 +7,7 @@ import 'package:smart_textfield/smart_textfield.dart';
 import '../../../../widgets/async_button.dart';
 import '../../../context/domain/entity/context_entity.dart';
 import '../../../context/domain/entity/context_tokenizer.dart';
+import '../../../context/presentation/state/context_state_provider.dart';
 import '../../../projects/domain/entity/project_entity.dart';
 import '../../../projects/domain/entity/project_tokenizer.dart';
 import '../../../projects/presentation/state/projects.dart';
@@ -50,6 +51,7 @@ class _AddTaskWidgetState extends ConsumerState<AddTaskWidget> {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       unawaited(_fetchProjects());
+      unawaited(_fetchContext());
       _smartTextFieldController.addListener(_fetchDataFromTextField);
     });
   }
@@ -58,6 +60,14 @@ class _AddTaskWidgetState extends ConsumerState<AddTaskWidget> {
     final _projects = await ref.read(projectsProvider.future);
 
     final _tokenizer = ProjectTokenizer(values: _projects);
+
+    _smartTextFieldController.addTokenizer(_tokenizer);
+  }
+
+  Future<void> _fetchContext() async {
+    final _context = await ref.read(contextStateProvider.future);
+
+    final _tokenizer = ContextTokenizer(values: _context);
 
     _smartTextFieldController.addTokenizer(_tokenizer);
   }

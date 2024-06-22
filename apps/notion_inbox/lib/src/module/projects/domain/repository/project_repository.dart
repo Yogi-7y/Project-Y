@@ -11,7 +11,5 @@ abstract class ProjectRepository {
 final projectRepositoryProvider = Provider<ProjectRepository>((ref) {
   final _apiService = ref.watch(apiServiceProvider);
 
-  print(_apiService);
-
   return ProjectRepositoryImpl(apiClient: _apiService);
 });

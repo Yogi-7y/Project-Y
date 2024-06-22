@@ -15,4 +15,7 @@ abstract class Env {
 
   @EnviedField(varName: 'TASK_DATABASE_ID')
   static const String taskDatabaseId = _Env.taskDatabaseId;
+
+  @EnviedField(varName: 'CONTEXT_DATABASE_ID')
+  static const String contextDatabaseId = _Env.contextDatabaseId;
 }
