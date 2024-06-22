@@ -15,10 +15,16 @@ class TaskSection extends ConsumerWidget {
     return ref.watch(tasksProvider).when(
           error: (error, __) => Text('Error: $error'),
           loading: () => const Center(child: CircularProgressIndicator()),
-          data: (tasks) => ListView.builder(
-            itemCount: tasks.length,
-            itemBuilder: (context, index) => TaskTile(task: tasks[index]),
-          ),
+          data: (tasks) {
+            if (tasks.isEmpty) {
+              return const Center(child: Text('No tasks'));
+            }
+
+            return ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) => TaskTile(task: tasks[index]),
+            );
+          },
         );
   }
 }

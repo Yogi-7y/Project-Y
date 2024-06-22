@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smart_textfield/smart_textfield.dart';
 
+import '../../../../widgets/async_button.dart';
 import '../../../context/domain/entity/context_entity.dart';
 import '../../../context/domain/entity/context_tokenizer.dart';
 import '../../../projects/domain/entity/project_entity.dart';
@@ -12,6 +13,7 @@ import '../../../projects/presentation/state/projects.dart';
 import '../../domain/entity/task_entity.dart';
 import '../../domain/use_case/task_use_case.dart';
 import '../state/task_form_provider.dart';
+import '../state/tasks_provider.dart';
 
 mixin TaskModals {
   Future<void> addTaskBottomSheet({
@@ -118,36 +120,49 @@ class _AddTaskWidgetState extends ConsumerState<AddTaskWidget> {
             children: ref.watch(extractedTokenChipsProvider),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              onPressed: () async {
-                final _dueDate = ref.read(dueDateTaskFormProvider);
-                final _project = ref.read(projectTaskFormProvider);
-                final _context = ref.read(contextTaskFormProvider);
+          AsyncButton(
+            onPressed: () async {
+              final _dueDate = ref.read(dueDateTaskFormProvider);
+              final _project = ref.read(projectTaskFormProvider);
+              final _context = ref.read(contextTaskFormProvider);
 
-                final task = TaskEntity(
-                  name: _smartTextFieldController.text,
-                  dueDate: _dueDate,
-                  project: _project,
-                  context: _context,
-                );
+              final task = TaskEntity(
+                name: _smartTextFieldController.text,
+                dueDate: _dueDate,
+                project: _project,
+                context: _context,
+              );
 
-                await ref.read(taskUseCaseProvider).addTask(task: task);
-              },
-              child: Text(
-                'Create',
-                style: Theme.of(context).textTheme.button?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
+              final _result = await ref.read(taskUseCaseProvider).addTask(task: task);
+
+              _result.when(
+                success: (value) {
+                  final _scaffoldMessenger = ScaffoldMessenger.of(context);
+                  ref.invalidate(tasksProvider);
+
+                  Navigator.of(context).pop();
+
+                  _scaffoldMessenger.showSnackBar(
+                    const SnackBar(
+                      content: Text('Task created!'),
+                      behavior: SnackBarBehavior.floating,
                     ),
-              ),
-            ),
+                  );
+                },
+                failure: (message, error, stackTrace) {
+                  final _scaffoldMessenger = ScaffoldMessenger.of(context);
+                  Navigator.of(context).pop();
+
+                  _scaffoldMessenger.showSnackBar(
+                    SnackBar(
+                      content: Text('Error: $message'),
+                    ),
+                  );
+                },
+              );
+            },
+            text: 'Create',
+            endToEndWidth: true,
           ),
         ],
       ),
