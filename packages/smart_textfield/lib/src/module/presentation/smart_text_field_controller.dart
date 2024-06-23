@@ -15,6 +15,14 @@ class SmartTextFieldController extends TextEditingController {
   @visibleForTesting
   List<Tokenizer> get tokenizers => _tokenizers;
 
+  /// Returns the plain text representation of the tokens in the smart text field. \
+  /// It filters out the highlighted tokens and returns the plain text.
+  String get plainText => _tokens
+      .where((token) => !token.isHighlighted)
+      .map((token) => token.displayValue.trimLeft())
+      .join()
+      .trim();
+
   void clearAll() {
     _tokenizers.clear();
     notifyListeners();

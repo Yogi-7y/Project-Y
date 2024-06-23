@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Introduce `plainText` in `SmartTextFieldController` to get the plain text without tokens.
+
 ## 1.0.3
 
 - Update README.md to include `SmartTextFieldOverlay` widget.
