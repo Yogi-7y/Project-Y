@@ -25,7 +25,7 @@ dependencies:
     git:
       url: https://github.com/Yogi-7y/Project-Y.git
       path: packages/smart_textfield
-      ref: smart_textfield_v1.0.3
+      ref: smart_textfield_v1.0.4
 
 dev_dependencies:
   build_runner: ^2.4.9

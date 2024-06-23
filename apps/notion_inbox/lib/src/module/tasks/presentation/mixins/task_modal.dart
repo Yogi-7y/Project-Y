@@ -137,7 +137,7 @@ class _AddTaskWidgetState extends ConsumerState<AddTaskWidget> {
               final _context = ref.read(contextTaskFormProvider);
 
               final task = TaskEntity(
-                name: _smartTextFieldController.text,
+                name: _smartTextFieldController.plainText,
                 dueDate: _dueDate,
                 project: _project,
                 context: _context,
