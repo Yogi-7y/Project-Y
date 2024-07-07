@@ -4,7 +4,7 @@
 
 
     <application
-        android:label="notion_inbox"
+        android:label="Notion Inbox"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
