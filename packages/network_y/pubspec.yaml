@@ -12,7 +12,7 @@ dependencies:
     git:
       url: https://github.com/Yogi-7y/Project-Y.git
       path: packages/core_y
-      ref: main
+      ref: core_y_v1.0.0
 
   dio: ^5.4.1
 
