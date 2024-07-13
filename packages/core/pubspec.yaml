@@ -17,7 +17,7 @@ dev_dependencies:
   lints_y:
     git:
       url: https://github.com/Yogi-7y/Project-Y.git
-      path: packages/lints_y
-      ref: lints_y_v1.0.0
+      path: packages/lints
+      ref: lints_v1.0.0
 
 flutter:
