@@ -1,4 +1,4 @@
-name: core
+name: core_y
 description: "A new Flutter package project."
 version: 0.0.1
 publish_to: "none"
@@ -15,6 +15,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   lints_y:
-    path: ../lints_y
+    git:
+      url: https://github.com/Yogi-7y/Project-Y.git
+      path: packages/lints_y
+      ref: lints_y_v1.0.0
 
 flutter:
