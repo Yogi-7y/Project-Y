@@ -1,5 +1,4 @@
-import 'package:core/src/exceptions/app_exception.dart';
-import 'package:core/src/serialization_validatory.dart';
+import 'package:core_y/core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 const _source = <String, Object?>{

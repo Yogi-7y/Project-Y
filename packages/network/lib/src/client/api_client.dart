@@ -1,4 +1,4 @@
-import 'package:core/core.dart';
+import 'package:core_y/core.dart';
 
 import '../request/request.dart';
 import 'executors/api_executor.dart';
@@ -16,9 +16,9 @@ class ApiClient {
 
   AsyncResult<T> call<T>(Request request) {
     if (request is GetRequest) {
-      return apiExecutor.get(request);
+      return apiExecutor.get<T>(request);
     } else if (request is PostRequest) {
-      return apiExecutor.post(request);
+      return apiExecutor.post<T>(request);
     } else {
       throw UnsupportedError('Request type(${request.runtimeType}) not supported!');
     }

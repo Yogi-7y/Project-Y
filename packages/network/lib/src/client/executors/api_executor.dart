@@ -1,4 +1,4 @@
-import 'package:core/core.dart';
+import 'package:core_y/core.dart';
 
 import '../../request/request.dart';
 

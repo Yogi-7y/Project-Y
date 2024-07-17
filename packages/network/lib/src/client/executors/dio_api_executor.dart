@@ -1,5 +1,5 @@
 import 'dart:developer' as developer;
-import 'package:core/core.dart';
+import 'package:core_y/core.dart';
 import 'package:dio/dio.dart';
 
 import '../../exceptions/api_exception.dart';
