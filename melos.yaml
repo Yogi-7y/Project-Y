@@ -1,0 +1,14 @@
+name: project_y
+repository: https://github.com/Yogi-7y/Project-Y.git
+sdkPath: .fvm/flutter_sdk
+
+packages:
+  - packages/*
+
+ide:
+  intellij: 
+    enabled: false
+
+scripts:
+  analyze:
+    exec: dart analyze .

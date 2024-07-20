@@ -1,0 +1,10 @@
+name: project_y
+
+environment: 
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.22.3"
+  
+dev_dependencies:
+  melos: ^6.1.0
+
+
