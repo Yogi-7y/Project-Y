@@ -1,17 +1,13 @@
 name: network_y
 description: "Network package for Project Y."
-version: 0.0.1
+version: 0.0.2
 
 environment:
   sdk: ">=3.2.6 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
-  core_y:
-    git:
-      url: https://github.com/Yogi-7y/Project-Y.git
-      path: packages/core
-      ref: core_v1.0.2
+  core_y: ^0.0.2
 
   dio: ^5.4.1
 
@@ -24,11 +20,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  lints_y:
-    git:
-      url: https://github.com/Yogi-7y/Project-Y.git
-      path: packages/lints
-      ref: lints_v1.0.0
+  lints_y: ^0.0.1
 
   mocktail: ^1.0.3
 
