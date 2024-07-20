@@ -9,6 +9,10 @@ ide:
   intellij: 
     enabled: false
 
+command:
+  version:
+    includeScopes: "false"
+
 scripts:
   analyze:
     exec: dart analyze .
