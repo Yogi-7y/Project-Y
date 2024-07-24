@@ -1,76 +1,41 @@
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
-/// {@template request}
-/// Contract for a HTTP request.
-/// {@endtemplate}
+typedef Headers = Map<String, String>;
+typedef QueryParameters = Map<String, String>;
+typedef Payload = Map<String, Object?>;
+
 @immutable
-@internal
 abstract class Request {
-  /// {@macro request}
   const Request({
-    required this.host,
+    required this.baseUrl,
     required this.endpoint,
-    this.scheme = 'https',
-    this.headers = const <String, String>{},
-    this.queryParameters = const <String, String>{},
+    this.headers = const {},
+    this.queryParameters = const {},
+    this.timeout = const Duration(seconds: 30),
   });
 
-  /// Host for the URL.
-  /// Example: `abc.example.com/`
-  final String host;
+  /// Eg. https://api.example.com
+  final String baseUrl;
 
-  /// Scheme for the URL.
-  /// Example: `https`
-  final String scheme;
-
-  /// Endpoint of the request.
-  /// Example: `/users`
-  /// Will be appended to the `url` resulting in `https://example.com/api/v1/users`
+  /// Eg. /users
   final String endpoint;
 
-  /// Request headers.
-  final Map<String, String> headers;
+  /// Headers to be sent with the request
+  final Headers headers;
 
-  /// Query parameters.
-  /// Example: `{'page': '1', 'limit': '10'}`
-  /// Will be converted to `?page=1&limit=10`
-  /// for url `https://example.com/api/v1/users`
-  /// resulting in `https://example.com/api/v1/users?page=1&limit=10`
-  final Map<String, String> queryParameters;
+  /// Query parameters to be sent with the request
+  /// Eg. {'page': '1', 'limit': '10'}
+  /// will be converted to `?page=1&limit=10`
+  final QueryParameters queryParameters;
 
-  /// Returns the URL string representation of the request.
-  String get url => Uri(
-        scheme: scheme,
-        host: host,
+  /// Timeout duration for the request
+  final Duration timeout;
+
+  /// Computed full URL including base URL, endpoint, and query parameters
+  String get url => Uri.parse(baseUrl)
+      .replace(
         path: endpoint,
         queryParameters: queryParameters.isNotEmpty ? queryParameters : null,
-      ).toString();
-}
-
-@immutable
-class GetRequest extends Request {
-  const GetRequest({
-    required super.host,
-    required super.endpoint,
-    super.scheme,
-    super.queryParameters,
-    super.headers,
-  });
-}
-
-@immutable
-class PostRequest extends Request {
-  const PostRequest({
-    required super.host,
-    required super.endpoint,
-    this.body = const <String, Object?>{},
-    super.scheme,
-    super.headers,
-    super.queryParameters,
-  });
-
-  /// Body of the request for a POST request.
-  /// Example: `{'name': 'John Doe', 'age': 25}`
-  /// For a GET request, it will be ignored.
-  final Map<String, Object?> body;
+      )
+      .toString();
 }

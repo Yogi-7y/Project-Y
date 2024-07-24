@@ -1,73 +1,104 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:network_y/network.dart';
+import 'package:network_y/src/request/request.dart';
+import 'package:test/test.dart';
+
+class TestRequest extends Request {
+  const TestRequest({
+    required super.baseUrl,
+    required super.endpoint,
+    super.headers,
+    super.queryParameters,
+    super.timeout,
+  });
+}
 
 void main() {
-  test('test endpoint', () {
-    const _request = GetRequest(host: 'api.example.com', endpoint: '/users');
-    const _expectedResult = 'https://api.example.com/users';
-    expect(_request.url, _expectedResult);
-  });
-
-  test(
-    'query parameters',
-    () {
-      const _request = GetRequest(
-        host: 'api.example.com',
+  group('Request', () {
+    test('creates instance with required parameters', () {
+      const request = TestRequest(
+        baseUrl: 'https://api.example.com',
         endpoint: '/users',
+      );
+
+      expect(request.baseUrl, 'https://api.example.com');
+      expect(request.endpoint, '/users');
+      expect(request.headers, isEmpty);
+      expect(request.queryParameters, isEmpty);
+      expect(request.timeout, const Duration(seconds: 30));
+    });
+
+    test('creates instance with all parameters', () {
+      const request = TestRequest(
+        baseUrl: 'https://api.example.com',
+        endpoint: '/users',
+        headers: {'Authorization': 'Bearer token'},
         queryParameters: {'page': '1', 'limit': '10'},
+        timeout: Duration(seconds: 45),
       );
 
-      const _expectedResult = 'https://api.example.com/users?page=1&limit=10';
+      expect(request.baseUrl, 'https://api.example.com');
+      expect(request.endpoint, '/users');
+      expect(request.headers, {'Authorization': 'Bearer token'});
+      expect(request.queryParameters, {'page': '1', 'limit': '10'});
+      expect(request.timeout, const Duration(seconds: 45));
+    });
 
-      expect(_request.url, _expectedResult);
-    },
-  );
+    group('url getter', () {
+      test('returns correct URL without query parameters', () {
+        const request = TestRequest(
+          baseUrl: 'https://api.example.com',
+          endpoint: '/users',
+        );
 
-  test(
-    'query parameters with empty headers',
-    () {
-      const _request = GetRequest(
-        host: 'api.example.com',
-        endpoint: '/users',
-        queryParameters: {'page': '1', 'limit': '10'},
-        headers: {'token': '123'},
-      );
+        expect(request.url, 'https://api.example.com/users');
+      });
 
-      const _expectedResult = 'https://api.example.com/users?page=1&limit=10';
+      test('returns correct URL with query parameters', () {
+        const request = TestRequest(
+          baseUrl: 'https://api.example.com',
+          endpoint: '/users',
+          queryParameters: {'page': '1', 'limit': '10'},
+        );
 
-      expect(_request.url, _expectedResult);
-      expect(_request.headers, {'token': '123'});
-    },
-  );
+        expect(request.url, 'https://api.example.com/users?page=1&limit=10');
+      });
 
-  test(
-    'custom scheme',
-    () {
-      const _request = GetRequest(
-        host: 'api.example.com',
-        endpoint: '/users',
-        scheme: 'http',
-      );
+      test('handles trailing slash in baseUrl correctly', () {
+        const request = TestRequest(
+          baseUrl: 'https://api.example.com/',
+          endpoint: '/users',
+        );
 
-      const _expectedResult = 'http://api.example.com/users';
+        expect(request.url, 'https://api.example.com/users');
+      });
 
-      expect(_request.url, _expectedResult);
-    },
-  );
+      test('handles leading slash in endpoint correctly', () {
+        const request = TestRequest(
+          baseUrl: 'https://api.example.com',
+          endpoint: 'users',
+        );
 
-  test('post request', () {
-    const _request = PostRequest(
-      host: 'api.example.com',
-      endpoint: '/users',
-      body: {'name': 'John Doe'},
-      queryParameters: {'page': '1', 'limit': '10'},
-      headers: {'token': '123'},
-    );
+        expect(request.url, 'https://api.example.com/users');
+      });
 
-    const _expectedResult = 'https://api.example.com/users?page=1&limit=10';
+      test('encodes query parameters correctly', () {
+        const request = TestRequest(
+          baseUrl: 'https://api.example.com',
+          endpoint: '/search',
+          queryParameters: {'q': 'flutter dart'},
+        );
 
-    expect(_request.url, _expectedResult);
-    expect(_request.body, {'name': 'John Doe'});
-    expect(_request.headers, {'token': '123'});
+        expect(request.url, 'https://api.example.com/search?q=flutter+dart');
+      });
+
+      test('handles special characters in query parameters', () {
+        const request = TestRequest(
+          baseUrl: 'https://api.example.com',
+          endpoint: '/search',
+          queryParameters: {'q': 'flutter&dart', 'filter': 'year>2020'},
+        );
+
+        expect(request.url, 'https://api.example.com/search?q=flutter%26dart&filter=year%3E2020');
+      });
+    });
   });
 }

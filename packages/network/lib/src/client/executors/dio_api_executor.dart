@@ -32,6 +32,7 @@ class DioApiExecutor implements ApiExecutor {
   @override
   AsyncResult<T> post<T>(Request request) async {
     try {
+      return;
       if (request is! PostRequest) throw ArgumentError('post method only accepts PostRequest');
 
       final _response = await dio.post<T>(request.url,
