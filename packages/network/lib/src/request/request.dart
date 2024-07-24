@@ -39,3 +39,5 @@ abstract class Request {
       )
       .toString();
 }
+
+abstract class GetRequest implements Request {}

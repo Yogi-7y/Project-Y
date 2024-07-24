@@ -11,6 +11,17 @@ class TestRequest extends Request {
   });
 }
 
+// This concrete implementation is just for testing purposes
+class TestGetRequest extends Request implements GetRequest {
+  const TestGetRequest({
+    required super.baseUrl,
+    required super.endpoint,
+    super.headers,
+    super.queryParameters,
+    super.timeout,
+  });
+}
+
 void main() {
   group('Request', () {
     test('creates instance with required parameters', () {
@@ -99,6 +110,64 @@ void main() {
 
         expect(request.url, 'https://api.example.com/search?q=flutter%26dart&filter=year%3E2020');
       });
+    });
+  });
+
+  group('GetRequest', () {
+    test('can be instantiated as a Request', () {
+      const request = TestGetRequest(
+        baseUrl: 'https://api.example.com',
+        endpoint: '/users',
+      );
+
+      expect(request, isA<Request>());
+      expect(request, isA<GetRequest>());
+    });
+
+    test('inherits properties from Request', () {
+      const request = TestGetRequest(
+        baseUrl: 'https://api.example.com',
+        endpoint: '/users',
+        headers: {'Authorization': 'Bearer token'},
+        queryParameters: {'page': '1'},
+        timeout: Duration(seconds: 45),
+      );
+
+      expect(request.baseUrl, 'https://api.example.com');
+      expect(request.endpoint, '/users');
+      expect(request.headers, {'Authorization': 'Bearer token'});
+      expect(request.queryParameters, {'page': '1'});
+      expect(request.timeout, const Duration(seconds: 45));
+    });
+
+    test('generates correct URL', () {
+      const request = TestGetRequest(
+        baseUrl: 'https://api.example.com',
+        endpoint: '/users',
+        queryParameters: {'page': '1', 'limit': '10'},
+      );
+
+      expect(request.url, 'https://api.example.com/users?page=1&limit=10');
+    });
+
+    test('can be used in a list of Requests', () {
+      final requests = <Request>[
+        const TestGetRequest(baseUrl: 'https://api.example.com', endpoint: '/users'),
+        const TestGetRequest(baseUrl: 'https://api.example.com', endpoint: '/posts'),
+      ];
+
+      expect(requests, everyElement(isA<GetRequest>()));
+      expect(requests, everyElement(isA<Request>()));
+    });
+
+    test('maintains immutability', () {
+      const request = TestGetRequest(
+        baseUrl: 'https://api.example.com',
+        endpoint: '/users',
+      );
+
+      expect(() => (request as dynamic).baseUrl = 'https://new.example.com', throwsA(anything));
+      expect(() => (request as dynamic).endpoint = '/new', throwsA(anything));
     });
   });
 }
