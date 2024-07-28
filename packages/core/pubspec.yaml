@@ -1,6 +1,8 @@
 name: core_y
 description: "A new Flutter package project."
 version: 0.0.3
+repository: https://github.com/Yogi-7y/Project-Y.git
+homepage: https://github.com/Yogi-7y/Project-Y/tree/main/packages/core
 
 environment:
   sdk: ">=3.2.6 <4.0.0"
