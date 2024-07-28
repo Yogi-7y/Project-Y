@@ -15,6 +15,34 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`core_y` - `v0.0.3+1`](#core_y---v0031)
+ - [`network_y` - `v0.0.2+2`](#network_y---v0022)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `network_y` - `v0.0.2+2`
+
+---
+
+#### `core_y` - `v0.0.3+1`
+
+ - **FIX**: imports. ([2c45d054](https://github.com/Yogi-7y/Project-Y.git/commit/2c45d054abd4358241a591ad9be2a9400d91692a))
+
+
+## 2024-07-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`core_y` - `v0.0.3`](#core_y---v003)
  - [`network_y` - `v0.0.2+1`](#network_y---v0021)
 
