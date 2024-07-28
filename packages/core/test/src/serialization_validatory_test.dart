@@ -1,4 +1,4 @@
-import 'package:core_y/core.dart';
+import 'package:core_y/core_y.dart';
 import 'package:test/test.dart';
 
 const _source = <String, Object?>{
