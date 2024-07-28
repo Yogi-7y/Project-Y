@@ -11,7 +11,7 @@ ide:
 
 command:
   version:
-    includeScopes: "false"
+    includeScopes: false
 
 scripts:
   analyze:
