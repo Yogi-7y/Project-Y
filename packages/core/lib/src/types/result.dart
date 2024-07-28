@@ -1,5 +1,7 @@
 import 'package:meta/meta.dart';
 
+typedef AsyncResult<S, E extends Exception> = Future<Result<S, E>>;
+
 @immutable
 sealed class Result<S, E extends Exception> {
   const Result();
