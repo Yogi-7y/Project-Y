@@ -7,12 +7,14 @@ import '../request/request.dart';
 class ApiException implements Exception {
   const ApiException({
     required this.request,
+    this.statusCode,
     this.response,
     this.error,
     this.stackTrace,
   });
 
   final Request request;
+  final int? statusCode;
   final Object? response;
   final Object? error;
   final StackTrace? stackTrace;
