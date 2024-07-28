@@ -10,8 +10,14 @@ class DioApiExecutor implements ApiExecutor {
   late Dio dio;
 
   @override
-  Future<void> setUp() async {
-    dio = Dio();
+  Future<void> setUp({
+    SetupRequest? request,
+  }) async {
+    final _options = BaseOptions(
+      headers: request?.headers,
+    );
+
+    dio = Dio(_options);
   }
 
   @override
@@ -23,6 +29,7 @@ class DioApiExecutor implements ApiExecutor {
           headers: request.headers,
         ),
       );
+
       return Success(_response.data as T);
     } catch (exception, stackTrace) {
       return _catch(request, exception, stackTrace);
@@ -32,7 +39,6 @@ class DioApiExecutor implements ApiExecutor {
   @override
   AsyncResult<T> post<T>(Request request) async {
     try {
-      return;
       if (request is! PostRequest) throw ArgumentError('post method only accepts PostRequest');
 
       final _response = await dio.post<T>(request.url,
@@ -40,6 +46,7 @@ class DioApiExecutor implements ApiExecutor {
           options: Options(
             headers: request.headers,
           ));
+
       return Success(_response.data as T);
     } catch (exception, stackTrace) {
       return _catch(request, exception, stackTrace);
