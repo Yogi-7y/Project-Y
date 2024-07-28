@@ -31,20 +31,36 @@ class DioApiExecutor implements ApiExecutor {
   }
 
   @override
-  AsyncResult<T, ApiException> post<T>(Request request) {
-    throw UnimplementedError();
+  AsyncResult<T, ApiException> post<T>(PostRequest request) async {
+    try {
+      final _response = await _dio.post<T>(
+        request.url,
+        data: request.body,
+        options: Options(
+          headers: request.headers,
+          sendTimeout: request.timeout,
+          receiveTimeout: request.timeout,
+        ),
+      );
+
+      return Success(_response.data as T);
+    } on DioException catch (e, s) {
+      return Failure(ApiException.fromDioException(e, s, request));
+    } catch (e, s) {
+      return Failure(ApiException.fromException(e, s, request));
+    }
   }
 
   @override
-  AsyncResult<void, Exception> setUp({SetupRequest? request}) async {
+  AsyncResult<void, AppException> setUp({SetupRequest? request}) async {
     try {
       if (request != null) {
         _dio.options.headers.addAll(request.headers);
       }
 
       return const Success(null);
-    } catch (e) {
-      return Failure(e as Exception);
+    } catch (e, s) {
+      return Failure(AppException.fromException(e as Exception, s));
     }
   }
 }
