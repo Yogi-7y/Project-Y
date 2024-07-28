@@ -8,7 +8,7 @@ typedef SetupRequest = ({
 });
 
 abstract class ApiExecutor {
-  AsyncResult<bool, Exception> setUp({SetupRequest? request});
+  AsyncResult<void, Exception> setUp({SetupRequest? request});
 
   AsyncResult<T, ApiException> get<T>(Request request);
 

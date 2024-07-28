@@ -1,79 +1,50 @@
-// import 'dart:developer' as developer;
-// import 'package:dio/dio.dart';
+import 'package:core_y/core_y.dart';
+import 'package:dio/dio.dart';
 
-// import '../../exceptions/api_exception.dart';
-// import '../../request/request.dart';
-// import 'api_executor.dart';
+import '../../exceptions/api_exception.dart';
+import '../../request/request.dart';
 
-// class DioApiExecutor implements ApiExecutor {
-//   late Dio dio;
+import 'api_executor.dart';
 
-//   @override
-//   Future<void> setUp({
-//     SetupRequest? request,
-//   }) async {
-//     final _options = BaseOptions(
-//       headers: request?.headers,
-//     );
+class DioApiExecutor implements ApiExecutor {
+  late final _dio = Dio();
 
-//     dio = Dio(_options);
-//   }
+  @override
+  AsyncResult<T, ApiException> get<T>(Request request) async {
+    try {
+      final _response = await _dio.get<T>(
+        request.url,
+        queryParameters: request.queryParameters,
+        options: Options(
+          headers: request.headers,
+          sendTimeout: request.timeout,
+          receiveTimeout: request.timeout,
+        ),
+      );
 
-//   @override
-//   AsyncResult<T> get<T>(Request request) async {
-//     try {
-//       final _response = await dio.get<T>(
-//         request.url,
-//         options: Options(
-//           headers: request.headers,
-//         ),
-//       );
+      return Success(_response.data as T);
+    } on DioException catch (e, s) {
+      return Failure(ApiException.fromDioException(e, s, request));
+    } catch (e, s) {
+      return Failure(ApiException.fromException(e, s, request));
+    }
+  }
 
-//       return Success(_response.data as T);
-//     } catch (exception, stackTrace) {
-//       return _catch(request, exception, stackTrace);
-//     }
-//   }
+  @override
+  AsyncResult<T, ApiException> post<T>(Request request) {
+    throw UnimplementedError();
+  }
 
-//   @override
-//   AsyncResult<T> post<T>(Request request) async {
-//     try {
-//       if (request is! PostRequest) throw ArgumentError('post method only accepts PostRequest');
+  @override
+  AsyncResult<void, Exception> setUp({SetupRequest? request}) async {
+    try {
+      if (request != null) {
+        _dio.options.headers.addAll(request.headers);
+      }
 
-//       final _response = await dio.post<T>(request.url,
-//           data: request.body,
-//           options: Options(
-//             headers: request.headers,
-//           ));
-
-//       return Success(_response.data as T);
-//     } catch (exception, stackTrace) {
-//       return _catch(request, exception, stackTrace);
-//     }
-//   }
-
-//   Failure<T> _catch<T>(
-//     Request request,
-//     Object? exception,
-//     StackTrace? stackTrace,
-//   ) {
-//     developer.log('Error: $exception', error: exception, stackTrace: stackTrace);
-//     if (exception is DioException) {
-//       return Failure<T>(
-//         error: ApiException(
-//           request: request,
-//           error: exception,
-//           response: exception.response,
-//           stackTrace: stackTrace,
-//         ),
-//         stackTrace: stackTrace,
-//       );
-//     }
-
-//     return Failure(
-//       error: exception,
-//       stackTrace: stackTrace,
-//     );
-//   }
-// }
-
+      return const Success(null);
+    } catch (e) {
+      return Failure(e as Exception);
+    }
+  }
+}

@@ -5,35 +5,41 @@ import 'package:meta/meta.dart';
 @immutable
 class AppException implements Exception {
   const AppException({
-    required this.consoleMessage,
-    this.code = AppExceptionCode.defaultCode,
-    this.message = 'Something went wrong. Please try again later.',
+    required this.exception,
+    required this.stackTrace,
+    this.userFriendlyMessage = 'Something went wrong. Please try again later.',
   });
 
-  final AppExceptionCode code;
+  factory AppException.fromException(Exception e, StackTrace s) {
+    return AppException(
+      exception: e,
+      stackTrace: s,
+    );
+  }
 
   /// User-friendly message
-  final String message;
+  final String userFriendlyMessage;
 
-  /// Console-friendly message
-  final String consoleMessage;
+  final Object? exception;
+
+  final StackTrace stackTrace;
 }
 
-class SerializationException extends AppException {
-  const SerializationException({
-    required super.consoleMessage,
-    super.message,
-    super.code,
-  });
-}
+// class SerializationException extends AppException {
+//   const SerializationException({
+//     required super.consoleMessage,
+//     super.userFriendlyMessage,
+//     super.code,
+//   });
+// }
 
-enum AppExceptionCode {
-  defaultCode(code: 'default_code'),
+// enum AppExceptionCode {
+//   defaultCode(code: 'default_code'),
 
-  /// Used during serialization when a key is expected but not found
-  missingKey(code: 'missing_key');
+//   /// Used during serialization when a key is expected but not found
+//   missingKey(code: 'missing_key');
 
-  const AppExceptionCode({required this.code});
+//   const AppExceptionCode({required this.code});
 
-  final String code;
-}
+//   final String code;
+// }

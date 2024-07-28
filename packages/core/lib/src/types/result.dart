@@ -1,9 +1,11 @@
 import 'package:meta/meta.dart';
 
-typedef AsyncResult<S, E extends Exception> = Future<Result<S, E>>;
+import '../../core_y.dart';
+
+typedef AsyncResult<S, E extends AppException> = Future<Result<S, E>>;
 
 @immutable
-sealed class Result<S, E extends Exception> {
+sealed class Result<S, E extends AppException> {
   const Result();
 
   bool get isSuccess => this is Success<S, E>;
@@ -20,7 +22,7 @@ sealed class Result<S, E extends Exception> {
   Result<T, E> map<T>(T Function(S value) transform);
 }
 
-final class Success<S, E extends Exception> extends Result<S, E> {
+final class Success<S, E extends AppException> extends Result<S, E> {
   const Success(this.value);
 
   final S value;
@@ -32,7 +34,7 @@ final class Success<S, E extends Exception> extends Result<S, E> {
   Result<T, E> map<T>(T Function(S value) transform) => Success(transform(value));
 }
 
-final class Failure<S, E extends Exception> extends Result<S, E> {
+final class Failure<S, E extends AppException> extends Result<S, E> {
   const Failure(this.error);
 
   final E error;

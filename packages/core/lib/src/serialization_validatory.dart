@@ -16,7 +16,8 @@ class SerializationValidator {
             ..writeln('Source: $source')
             ..writeln()
             ..writeln('Stack Trace: ${StackTrace.current}');
-          throw SerializationException(consoleMessage: _buffer.toString());
+          // throw SerializationException(consoleMessage: _buffer.toString());
+          throw Exception('');
         }
 
         return _value;

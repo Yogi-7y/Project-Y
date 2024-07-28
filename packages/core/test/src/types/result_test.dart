@@ -4,10 +4,10 @@ import 'package:test/test.dart';
 void main() {
   group('Result', () {
     group('Success', () {
-      late Success<int, Exception> success;
+      late Success<int, AppException> success;
 
       setUp(() {
-        success = const Success<int, Exception>(5);
+        success = const Success<int, AppException>(5);
       });
 
       test('isSuccess should be true', () {
@@ -32,18 +32,18 @@ void main() {
 
       test('map should transform the value', () {
         final mapped = success.map((value) => value * 2);
-        expect(mapped, isA<Success<int, Exception>>());
+        expect(mapped, isA<Success<int, AppException>>());
         expect(mapped.valueOrNull, equals(10));
       });
     });
 
     group('Failure', () {
-      late Failure<int, Exception> failure;
+      late Failure<int, AppException> failure;
       late Exception error;
 
       setUp(() {
         error = Exception('Error');
-        failure = Failure<int, Exception>(error);
+        failure = Failure<int, AppException>(AppException.fromException(error, StackTrace.empty));
       });
 
       test('isSuccess should be false', () {
@@ -63,24 +63,28 @@ void main() {
           (value) => 'Success: $value',
           (error) => 'Failure: $error',
         );
-        expect(folded, equals('Failure: Exception: Error'));
+        expect(folded, contains('Failure'));
       });
 
       test('map should not transform the value', () {
         final mapped = failure.map((value) => value * 2);
-        expect(mapped, isA<Failure<int, Exception>>());
-        expect((mapped as Failure<int, Exception>).error, equals(error));
+
+        expect(mapped, isA<Failure<int, AppException>>());
+        expect((mapped as Failure<int, AppException>).error.exception, equals(error));
       });
     });
+  });
 
-    group('base class', () {
-      test('Success should be a Result', () {
-        expect(const Success<int, Exception>(5), isA<Result<int, Exception>>());
-      });
+  group('base class', () {
+    test('Success should be a Result', () {
+      expect(const Success<int, AppException>(5), isA<Result<int, AppException>>());
+    });
 
-      test('Failure should be a Result', () {
-        expect(Failure<int, Exception>(Exception('Error')), isA<Result<int, Exception>>());
-      });
+    test('Failure should be a Result', () {
+      expect(
+          Failure<int, AppException>(
+              AppException.fromException(Exception('Error'), StackTrace.empty)),
+          isA<Result<int, AppException>>());
     });
   });
 }
