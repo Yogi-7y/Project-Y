@@ -16,3 +16,10 @@ command:
 scripts:
   analyze:
     exec: dart analyze .
+  
+  release_core_y:
+    description: "Version and Publish core_y"
+    run: |
+      melos version --scope="core_y" --yes &&
+      melos publish --scope="core_y" --no-dry-run &&
+      git push --follow-tags
