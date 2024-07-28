@@ -1,3 +1,8 @@
+## 0.0.3
+
+ - **FEAT**(core): introduce AsyncResult.
+ - **FEAT**(core): refactor Result class and write unit tests.
+
 ## 0.0.2
 
 - **FEAT**(core): create serialization validator.
