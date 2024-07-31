@@ -15,6 +15,36 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`core_y` - `v0.0.4`](#core_y---v004)
+ - [`network_y` - `v0.0.3+1`](#network_y---v0031)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `network_y` - `v0.0.3+1`
+
+---
+
+#### `core_y` - `v0.0.4`
+
+ - **FIX**: fix import. ([43aa7578](https://github.com/Yogi-7y/Project-Y.git/commit/43aa7578dd33da46f3793b3ef882e5ff381569bd))
+ - **FEAT**: unit tests for ApiClient. ([f418b8f0](https://github.com/Yogi-7y/Project-Y.git/commit/f418b8f076043771867d4d8624dcb2e7fc2889fd))
+ - **FEAT**: implement ApiException. ([5dbc8d23](https://github.com/Yogi-7y/Project-Y.git/commit/5dbc8d2388d28add347a15515c4a4703c637e6e7))
+
+
+## 2024-07-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`network_y` - `v0.0.3`](#network_y---v003)
 
 ---
