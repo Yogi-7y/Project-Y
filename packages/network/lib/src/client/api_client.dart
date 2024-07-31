@@ -15,14 +15,17 @@ class ApiClient {
 
   Future<void> setup() async => apiExecutor.setUp();
 
-  AsyncResult<T, ApiException> call<T>(Request request) {
+  AsyncResult<T, ApiException> call<T>(Request request) async {
     if (request is GetRequest) return apiExecutor.get<T>(request);
 
     if (request is PostRequest) return apiExecutor.post<T>(request);
 
-    throw ApiException(
-      request: request,
-      error: ArgumentError('Unsupported request type: ${request.runtimeType}'),
+    return Failure<T, ApiException>(
+      ApiException(
+        request: request,
+        exception: Exception('Unsupported request type'),
+        stackTrace: StackTrace.current,
+      ),
     );
   }
 }
