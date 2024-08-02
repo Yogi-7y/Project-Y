@@ -14,10 +14,10 @@ sealed class Result<S, E extends AppException> {
   S? get valueOrNull => isSuccess ? (this as Success<S, E>).value : null;
 
   /// Ensures that all the states are handled and returns a common type.
-  T fold<T>(
-    T Function(S value) onSuccess,
-    T Function(E error) onFailure,
-  );
+  T fold<T>({
+    required T Function(S value) onSuccess,
+    required T Function(E error) onFailure,
+  });
 
   Result<T, E> map<T>(T Function(S value) transform);
 }
@@ -28,7 +28,11 @@ final class Success<S, E extends AppException> extends Result<S, E> {
   final S value;
 
   @override
-  T fold<T>(T Function(S value) onSuccess, T Function(E error) onFailure) => onSuccess(value);
+  T fold<T>({
+    required T Function(S value) onSuccess,
+    required T Function(E error) onFailure,
+  }) =>
+      onSuccess(value);
 
   @override
   Result<T, E> map<T>(T Function(S value) transform) => Success(transform(value));
@@ -40,7 +44,11 @@ final class Failure<S, E extends AppException> extends Result<S, E> {
   final E error;
 
   @override
-  T fold<T>(T Function(S value) onSuccess, T Function(E error) onFailure) => onFailure(error);
+  T fold<T>({
+    required T Function(S value) onSuccess,
+    required T Function(E error) onFailure,
+  }) =>
+      onFailure(error);
 
   @override
   Result<T, E> map<T>(T Function(S value) transform) => Failure(error);
