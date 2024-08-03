@@ -1,5 +1,5 @@
 name: project_y
-repository: https://github.com/Yogi-7y/Project-Y.git
+repository: https://github.com/Yogi-7y/Project-Y
 sdkPath: .fvm/flutter_sdk
 
 packages:
@@ -12,6 +12,7 @@ ide:
 command:
   version:
     includeScopes: false
+    workspaceChangelog: false
 
 scripts:
   analyze:
