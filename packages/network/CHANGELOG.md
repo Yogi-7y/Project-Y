@@ -1,3 +1,7 @@
+## 0.0.4
+
+ - Bump "network_y" to `0.0.4`.
+
 ## 0.0.3+4
 
  - Update a dependency to the latest release.
