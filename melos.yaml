@@ -15,7 +15,7 @@ command:
     workspaceChangelog: false
 
     hooks:
-      post: dart run scripts/formate_changelog.dart
+      post: dart run scripts/format_changelog.dart
 
 scripts:
   analyze:
