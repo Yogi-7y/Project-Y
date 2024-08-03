@@ -2,7 +2,6 @@ import 'package:core_y/core_y.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network_y/network_y.dart';
 import 'package:network_y/src/client/executors/api_executor.dart';
-import 'package:network_y/src/exceptions/api_exception.dart';
 import 'package:network_y/src/request/request.dart';
 import 'package:test/test.dart';
 
