@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:core_y/core_y.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import '../request/request.dart';
 
