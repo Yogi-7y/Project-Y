@@ -24,8 +24,8 @@ void main() {
 
       test('fold should call onSuccess', () {
         final folded = success.fold(
-          (value) => 'Success: $value',
-          (error) => 'Failure: $error',
+          onSuccess: (value) => 'Success: $value',
+          onFailure: (error) => 'Failure: $error',
         );
         expect(folded, equals('Success: 5'));
       });
@@ -60,8 +60,8 @@ void main() {
 
       test('fold should call onFailure', () {
         final folded = failure.fold(
-          (value) => 'Success: $value',
-          (error) => 'Failure: $error',
+          onSuccess: (value) => 'Success: $value',
+          onFailure: (error) => 'Failure: $error',
         );
         expect(folded, contains('Failure'));
       });
