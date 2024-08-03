@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`network_y` - `v0.0.4+2`](#network_y---v0042)
+
+---
+
+#### `network_y` - `v0.0.4+2`
+
+ - **FIX**: import. ([72a22e8b](https://github.com/Yogi-7y/Project-Y.git/commit/72a22e8bd4c65c98d28a3326011fcbd3248c6291))
+
+
+## 2024-08-03
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`network_y` - `v0.0.4+1`](#network_y---v0041)
 
 ---

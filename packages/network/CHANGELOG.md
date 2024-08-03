@@ -1,3 +1,7 @@
+## 0.0.4+2
+
+ - **FIX**: import. ([72a22e8b](https://github.com/Yogi-7y/Project-Y.git/commit/72a22e8bd4c65c98d28a3326011fcbd3248c6291))
+
 ## 0.0.4+1
 
  - **FIX**: import. ([937e98be](https://github.com/Yogi-7y/Project-Y.git/commit/937e98be23ba48a07b27408f219743a3d7816ce0))
