@@ -1,6 +1,6 @@
 name: core_y
 description: Core utilities for Project-Y
-version: 0.0.4+2
+version: 0.1.0
 repository: https://github.com/Yogi-7y/Project-Y.git
 homepage: https://github.com/Yogi-7y/Project-Y/tree/main/packages/core
 
