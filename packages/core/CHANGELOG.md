@@ -1,3 +1,8 @@
+## 0.1.0
+
+ - **FEAT**: introduce serialization exception. ([83b9f3f0](https://github.com/Yogi-7y/Project-Y.git/commit/83b9f3f048168cd11ea9edc4608d69f4285254d1))
+ - **DOCS**: dart docs for serialization exception. ([14eb36fb](https://github.com/Yogi-7y/Project-Y.git/commit/14eb36fbae2e556a920347a61dc4c334fb84e09c))
+
 ## 0.0.4+2
 
 ## 0.0.4+1
