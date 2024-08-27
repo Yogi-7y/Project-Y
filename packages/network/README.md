@@ -34,6 +34,59 @@ This simple example demonstrates how to define a request, set up the client, mak
 
 ## Key Components
 
+```mermaid
+classDiagram
+    class ApiClient {
+        +ApiExecutor executor
+        +call(Request) AsyncResult
+    }
+    class ApiExecutor {
+        <<interface>>
+        +get(Request) AsyncResult
+        +post(Request) AsyncResult
+        +setUp(SetupRequest)
+    }
+    class Request {
+        <<abstract>>
+        +String baseUrl
+        +String endpoint
+        +Headers headers
+        +QueryParameters queryParameters
+        +Duration timeout
+    }
+    class GetRequest {
+        <<interface>>
+    }
+    class PostRequest {
+        <<interface>>
+        +Payload body
+    }
+    class DioApiExecutor {
+        +get(Request) AsyncResult
+        +post(Request) AsyncResult
+        +setUp(SetupRequest)
+    }
+    class Result {
+        <<abstract>>
+    }
+    class Success {
+        +value
+    }
+    class Failure {
+        +ApiException error
+    }
+
+    ApiClient --> ApiExecutor
+    ApiExecutor <|.. DioApiExecutor
+    ApiClient --> Request
+    Request <|-- GetRequest
+    Request <|-- PostRequest
+    ApiClient --> Result
+    Result <|-- Success
+    Result <|-- Failure
+
+```
+
 ### ApiExecutor 🔧
 
 `ApiExecutor` is responsible for making the actual network requests. Internally, it can use various HTTP client packages like `dio`, `http`, etc. The beauty of this design is that you can easily switch between different executors without changing your application code.
