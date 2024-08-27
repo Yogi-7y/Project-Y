@@ -191,14 +191,6 @@ This approach allows you to add or update headers that may not be available or m
 
 3. Create an instance of `ApiClient` and start making requests!
 
-## Contributing 🤝
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License 📄
-
-[Insert your license information here]
-
 ---
 
 Happy coding! 💻✨
