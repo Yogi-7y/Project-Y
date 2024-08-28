@@ -54,3 +54,6 @@ examples/**/ios/
 examples/**/web/
 examples/**/windows/
 examples/**/macos/
+
+.claudeignore
+myenv/
