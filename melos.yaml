@@ -1,12 +1,11 @@
 name: project_y
 repository: https://github.com/Yogi-7y/Project-Y
-sdkPath: .fvm/flutter_sdk
 
 packages:
   - packages/*
 
 ide:
-  intellij: 
+  intellij:
     enabled: false
 
 command:
@@ -20,7 +19,7 @@ command:
 scripts:
   analyze:
     exec: dart analyze .
-  
+
   release_core_y:
     description: "Version and Publish core_y"
     run: |

@@ -1,3 +1,11 @@
+## 0.3.0
+
+- Introduce CacheManager
+
+## 0.2.0
+
+- Remove Flutter dependency
+
 ## 0.1.0
 
 - **feat**: introduce serialization exception.

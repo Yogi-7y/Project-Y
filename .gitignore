@@ -57,3 +57,5 @@ examples/**/macos/
 
 .claudeignore
 myenv/
+
+build/
