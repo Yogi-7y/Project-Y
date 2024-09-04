@@ -1,3 +1,8 @@
+## 0.2.1
+
+ - **FEAT**: introduce cache manager. ([2863e7e7](https://github.com/Yogi-7y/Project-Y/commit/2863e7e74b4941b6c232141553cc76e5289f7e09))
+ - **DOCS**: add doc strings. ([539a26d8](https://github.com/Yogi-7y/Project-Y/commit/539a26d875ea4d88bb3a6d75b152e4db0c649364))
+
 ## 0.2.0
 
 - Remove Flutter dependency

@@ -1,15 +1,14 @@
 name: network_y
 description: "Network package for Project Y."
-version: 0.0.4+4
+version: 0.1.1+1
 repository: https://github.com/Yogi-7y/Project-Y.git
 homepage: https://github.com/Yogi-7y/Project-Y/tree/main/packages/network
 
 environment:
   sdk: ">=3.2.6 <4.0.0"
-  flutter: ">=1.17.0"
 
 dependencies:
-  core_y: ^0.1.0
+  core_y: ^0.2.1
   dio: ^5.4.1
 
   meta: ^1.10.0
