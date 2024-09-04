@@ -1,11 +1,6 @@
 ## 0.3.0
 
- - Introduce CacheManager
-
-## 0.2.1
-
- - **feat**: introduce cache manager.
- - **docs**: add doc strings.
+- Introduce CacheManager
 
 ## 0.2.0
 
