@@ -50,16 +50,6 @@ class TestPatchRequest extends Request implements PatchRequest {
   final Payload body;
 }
 
-class TestDeleteRequest extends Request implements DeleteRequest {
-  TestDeleteRequest({
-    required super.baseUrl,
-    required super.endpoint,
-    super.headers,
-    super.queryParameters,
-    super.timeout,
-  });
-}
-
 void main() {
   group('Request', () {
     test('creates instance with required parameters', () {
@@ -312,27 +302,6 @@ void main() {
       );
 
       expect(request.body, {'name': 'Jane Doe'});
-    });
-  });
-  group('DeleteRequest', () {
-    test('creates instance with valid parameters', () {
-      expect(
-        () => TestDeleteRequest(
-          baseUrl: 'https://api.example.com',
-          endpoint: '/users/1',
-        ),
-        returnsNormally,
-      );
-    });
-
-    test('implements both Request and DeleteRequest', () {
-      final request = TestDeleteRequest(
-        baseUrl: 'https://api.example.com',
-        endpoint: '/users/1',
-      );
-
-      expect(request, isA<Request>());
-      expect(request, isA<DeleteRequest>());
     });
   });
 }

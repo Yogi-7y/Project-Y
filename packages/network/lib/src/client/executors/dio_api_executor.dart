@@ -10,6 +10,19 @@ class DioApiExecutor implements ApiExecutor {
   late final _dio = Dio();
 
   @override
+  AsyncResult<void, AppException> setUp({SetupRequest? request}) async {
+    try {
+      if (request != null) {
+        _dio.options.headers.addAll(request.headers);
+      }
+
+      return const Success(null);
+    } catch (e, s) {
+      return Failure(AppException.fromException(e as Exception, s));
+    }
+  }
+
+  @override
   AsyncResult<T, ApiException> get<T>(Request request) async {
     try {
       final _response = await _dio.get<T>(
@@ -52,15 +65,23 @@ class DioApiExecutor implements ApiExecutor {
   }
 
   @override
-  AsyncResult<void, AppException> setUp({SetupRequest? request}) async {
+  AsyncResult<T, ApiException> patch<T>(PatchRequest request) async {
     try {
-      if (request != null) {
-        _dio.options.headers.addAll(request.headers);
-      }
+      final _response = await _dio.patch<T>(
+        request.url,
+        data: request.body,
+        options: Options(
+          headers: request.headers,
+          sendTimeout: request.timeout,
+          receiveTimeout: request.timeout,
+        ),
+      );
 
-      return const Success(null);
+      return Success(_response.data as T);
+    } on DioException catch (e, s) {
+      return Failure(ApiException.fromDioException(e, s, request));
     } catch (e, s) {
-      return Failure(AppException.fromException(e as Exception, s));
+      return Failure(ApiException.fromException(e, s, request));
     }
   }
 }

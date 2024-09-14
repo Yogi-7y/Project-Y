@@ -59,3 +59,4 @@ examples/**/macos/
 myenv/
 
 build/
+.claudesync/config.local.json

@@ -13,4 +13,6 @@ abstract class ApiExecutor {
   AsyncResult<T, ApiException> get<T>(Request request);
 
   AsyncResult<T, ApiException> post<T>(PostRequest request);
+
+  AsyncResult<T, ApiException> patch<T>(PatchRequest request);
 }

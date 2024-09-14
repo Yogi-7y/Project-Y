@@ -11,6 +11,8 @@ class MockGetRequest extends Mock implements GetRequest {}
 
 class MockPostRequest extends Mock implements PostRequest {}
 
+class MockPatchRequest extends Mock implements PatchRequest {}
+
 class MockUnsupportedRequest extends Mock implements Request {}
 
 void main() {
@@ -55,6 +57,18 @@ void main() {
 
         expect(result, expectedResult);
         verify(() => mockApiExecutor.post<String>(request)).called(1);
+      });
+
+      test('call with PatchRequest should use apiExecutor.patch', () async {
+        final request = MockPatchRequest();
+        const expectedResult = Success<String, ApiException>('Success');
+
+        when(() => mockApiExecutor.patch<String>(request)).thenAnswer((_) async => expectedResult);
+
+        final result = await apiClient.call<String>(request);
+
+        expect(result, expectedResult);
+        verify(() => mockApiExecutor.patch<String>(request)).called(1);
       });
 
       test('call with unsupported request type should return Failure', () async {

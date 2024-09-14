@@ -53,5 +53,3 @@ abstract class PostRequest implements Request {
 abstract class PatchRequest implements Request {
   Payload get body;
 }
-
-abstract class DeleteRequest implements Request {}
