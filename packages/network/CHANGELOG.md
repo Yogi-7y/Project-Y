@@ -1,3 +1,7 @@
+## 0.1.2
+
+ - **FEAT**: add support for patch request. ([62f0ad25](https://github.com/Yogi-7y/Project-Y/commit/62f0ad256128311a764dea1220b3e0f0611a59c5))
+
 ## 0.1.1+3
 
  - Update a dependency to the latest release.
