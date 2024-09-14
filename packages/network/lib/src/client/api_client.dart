@@ -20,6 +20,8 @@ class ApiClient {
 
     if (request is PostRequest) return apiExecutor.post<T>(request);
 
+    if (request is PatchRequest) return apiExecutor.patch<T>(request);
+
     return Failure<T, ApiException>(
       ApiException(
         request: request,
