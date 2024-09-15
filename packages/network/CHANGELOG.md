@@ -1,3 +1,6 @@
+## 0.1.3
+
+ - **feat**: add support for pagination params.
 ## 0.1.2
 
  - **feat**: add support for patch request.
