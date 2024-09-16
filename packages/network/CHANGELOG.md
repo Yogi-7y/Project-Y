@@ -1,3 +1,8 @@
+## 0.1.4
+
+ - **FEAT**: rename pagination params variants. ([531130ac](https://github.com/Yogi-7y/Project-Y/commit/531130accb198504cdb708ff6f5c2255ccd7ee24))
+ - **FEAT**: create common pagination params for different pagination strategy. ([6949a279](https://github.com/Yogi-7y/Project-Y/commit/6949a279644e22da4c537961616ad81cccb0d426))
+
 ## 0.1.3
 
 - **feat**: add support for pagination params.
