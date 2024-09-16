@@ -15,13 +15,13 @@ sealed class PaginationStrategyParams {
 ///
 /// This strategy uses a cursor to keep track of the current position in the dataset.
 @immutable
-class CursorBasedStrategyParams extends PaginationStrategyParams {
-  /// Creates a new instance of [CursorBasedStrategyParams].
+class CursorPaginationStrategyParams extends PaginationStrategyParams {
+  /// Creates a new instance of [CursorPaginationStrategyParams].
   ///
   /// [limit] specifies the maximum number of items to be returned.
   /// [cursor] is an opaque string that points to a specific item in the dataset.
   /// If [cursor] is null, it typically indicates the start of the dataset.
-  const CursorBasedStrategyParams({required super.limit, this.cursor});
+  const CursorPaginationStrategyParams({required super.limit, this.cursor});
 
   /// An string that points to a specific item id in the dataset.
   final String? cursor;
@@ -31,13 +31,13 @@ class CursorBasedStrategyParams extends PaginationStrategyParams {
 ///
 /// This strategy uses an offset to skip a certain number of items in the dataset.
 @immutable
-class OffsetBasedStrategyParams extends PaginationStrategyParams {
-  /// Creates a new instance of [OffsetBasedStrategyParams].
+class OffsetPaginationStrategyParams extends PaginationStrategyParams {
+  /// Creates a new instance of [OffsetPaginationStrategyParams].
   ///
   /// [limit] specifies the maximum number of items to be returned.
   /// [offset] specifies the number of items to skip before starting to return results.
   /// If [offset] is null, it typically indicates the start of the dataset.
-  const OffsetBasedStrategyParams({required super.limit, this.offset});
+  const OffsetPaginationStrategyParams({required super.limit, this.offset});
 
   /// The number of items to skip before starting to return results.
   final int? offset;
