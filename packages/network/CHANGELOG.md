@@ -2,6 +2,10 @@
 
 - **feat**: add support for pagination params.
 
+## 0.1.2+1
+
+- **FIX**: add the remaining readme file. ([548206db](https://github.com/Yogi-7y/Project-Y/commit/548206db3d9f4fb9ee06f63beff3da7d466a23ed))
+
 ## 0.1.2
 
 - **feat**: add support for patch request.
