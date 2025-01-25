@@ -7,6 +7,8 @@ analyzer:
     strict-inference: true
   errors:
     included_file_warning: ignore
+  exclude:
+    - "**/*.g.dart"
 
 linter:
   rules:
