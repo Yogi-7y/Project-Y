@@ -6,9 +6,9 @@ A mono repo of tools to help quick start a project by having basic setup already
 
 | Package | Description |
 |---------|-------------|
-| [network_y](packages/network/README.md) | A flexible networking abstraction that supports pluggable HTTP clients, enabling clean separation between your app and its network implementation.
-| [core_y](packages/core/README.md) | Collection of essential utilities, common types, and extensions designed to standardize core functionality across projects. |
-| [lints_y](packages/lints/README.md) | Curated set of lint rules to maintain code quality and consistency. |
+| [network_y](packages/network) | A flexible networking abstraction that supports pluggable HTTP clients, enabling clean separation between your app and its network implementation.
+| [core_y](packages/core) | Collection of essential utilities, common types, and extensions designed to standardize core functionality across projects. |
+| [lints_y](packages/lints) | Curated set of lint rules to maintain code quality and consistency. |
 
 ## 💭 The Story Behind
 
