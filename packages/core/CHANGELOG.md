@@ -1,6 +1,12 @@
+# Core Package Changelog
+
+## 0.3.2
+
+- **feat**: introduced `asyncFold` in `Result` class.
+
 ## 0.3.1
 
- - **feat**: add time ago extension.
+- **feat**: add time ago extension.
 
 ## 0.3.0
 
